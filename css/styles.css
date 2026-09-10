@@ -3312,3 +3312,25 @@ aspect-ratio:2 / 3;
   }
 
 }
+
+  /* =========================================
+     PARA GACETILLA DE PRENSA
+     ========================================= */
+
+.press-button{
+  display:inline-block;
+  margin-top:25px;
+  padding:11px 22px;
+  border:1px solid #06181c;
+  color:#06181c;
+  text-decoration:none;
+  font-size:.75rem;
+  font-weight:700;
+  letter-spacing:.12em;
+  transition:all .25s ease;
+}
+
+.press-button:hover{
+  background:#06181c;
+  color:#ece4cf;
+}
