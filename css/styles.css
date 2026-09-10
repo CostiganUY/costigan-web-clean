@@ -3085,3 +3085,90 @@ aspect-ratio:2 / 3;
 .merch-promo a:hover span {
   color: #ece4cf;
 }
+
+/* =========================================================
+   MERCH — GRILLAS DESKTOP
+   ========================================================= */
+
+@media (min-width: 901px) {
+
+  /* Contenedor general más compacto */
+
+  #merch .merch-grid {
+    max-width: 900px;
+    gap: 20px;
+  }
+
+  /* =========================
+     REMERAS — 3 + 2 CENTRADAS
+     ========================= */
+
+  #merch .merch-grid.remeras,
+  #merch .merch-grid.remers {
+    grid-template-columns: repeat(6, 1fr);
+    gap: 18px;
+  }
+
+  #merch .merch-grid.remeras .merch-item,
+  #merch .merch-grid.remers .merch-item {
+    grid-column: span 2;
+    padding: 14px;
+  }
+
+  /* Segunda fila: modelos 4 y 5 centrados */
+
+  #merch .merch-grid.remeras .merch-item:nth-child(4),
+  #merch .merch-grid.remers .merch-item:nth-child(4) {
+    grid-column: 2 / span 2;
+  }
+
+  #merch .merch-grid.remeras .merch-item:nth-child(5),
+  #merch .merch-grid.remers .merch-item:nth-child(5) {
+    grid-column: 4 / span 2;
+  }
+
+  #merch .merch-grid.remeras .merch-item img,
+  #merch .merch-grid.remers .merch-item img {
+    height: 220px;
+    margin-bottom: 8px;
+  }
+
+  /* =========================
+     TOTEBAGS — 2 EN UNA FILA
+     ========================= */
+
+  #merch .merch-grid.totebags {
+    grid-template-columns: repeat(2, 250px);
+    gap: 20px;
+    justify-content: center;
+  }
+
+  #merch .merch-grid.totebags .merch-item {
+    padding: 14px;
+  }
+
+  #merch .merch-grid.totebags .merch-item img {
+    height: 260px;
+    margin-bottom: 8px;
+  }
+
+  /* =========================
+     STICKERS — 3 + 3
+     ========================= */
+
+  #merch .merch-grid.stickers {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    max-width: 780px;
+  }
+
+  #merch .merch-grid.stickers .merch-item {
+    padding: 12px;
+  }
+
+  #merch .merch-grid.stickers .merch-item img {
+    height: 165px;
+    margin-bottom: 6px;
+  }
+
+}
