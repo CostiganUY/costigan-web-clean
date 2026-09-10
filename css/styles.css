@@ -3328,3 +3328,75 @@ aspect-ratio:2 / 3;
   background:#06181c;
   color:#ece4cf;
 }
+
+/* =========================
+   BIO — NUEVA DISTRIBUCIÓN
+   ========================= */
+
+.bio-container{
+  display:grid;
+  grid-template-columns:320px 1fr;
+  grid-template-rows:auto auto auto;
+  column-gap:55px;
+  max-width:1000px;
+  margin:0 auto;
+  align-items:center;
+}
+
+.bio-photo{
+  grid-column:1;
+  grid-row:1 / 4;
+}
+
+.bio-photo img{
+  width:100%;
+  height:auto;
+  display:block;
+}
+
+.bio-text{
+  grid-column:2;
+  grid-row:1 / 4;
+  text-align:left;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+}
+
+.bio-text .section-text{
+  margin:0 0 25px;
+}
+
+.bio-text .press-button{
+  margin-top:5px;
+}
+
+
+/* =========================
+   MOBILE
+   ========================= */
+
+@media(max-width:600px){
+
+  .bio-container{
+    display:flex;
+    flex-direction:column;
+    max-width:100%;
+    gap:25px;
+  }
+
+  .bio-photo{
+    width:100%;
+  }
+
+  .bio-text{
+    width:100%;
+    text-align:center;
+    align-items:center;
+  }
+
+  .bio-text .section-text{
+    margin-bottom:22px;
+  }
+
+}
