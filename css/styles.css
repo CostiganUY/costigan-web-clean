@@ -3186,3 +3186,129 @@ aspect-ratio:2 / 3;
   color: #06181c !important;
   font-size: 1rem;
 }
+
+/* =========================================================
+   MERCH — AJUSTE FINAL DESKTOP
+   ========================================================= */
+
+@media (min-width: 901px) {
+
+  /* Título principal */
+
+  #merch .section-title {
+    color: #06181c !important;
+    font-size: 2rem;
+  }
+
+  /* Títulos de categorías */
+
+  #merch .merch-category > h3 {
+    color: #06181c !important;
+    font-size: 1rem;
+    letter-spacing: 0.14em;
+  }
+
+  /* =========================================
+     REMERAS — 3 ARRIBA + 2 CENTRADAS
+     ========================================= */
+
+  #merch .merch-shirts {
+    width: 760px;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 18px;
+  }
+
+  #merch .merch-shirts .merch-item {
+    grid-column: span 2;
+    padding: 12px;
+  }
+
+  /* Modelo 4 */
+
+  #merch .merch-shirts .merch-item:nth-child(4) {
+    grid-column: 2 / span 2;
+  }
+
+  /* Modelo 5 */
+
+  #merch .merch-shirts .merch-item:nth-child(5) {
+    grid-column: 4 / span 2;
+  }
+
+  #merch .merch-shirts .merch-item img {
+    height: 205px;
+    margin-bottom: 8px;
+  }
+
+  /* =========================================
+     TOTEBAGS — 2 CENTRADAS
+     ========================================= */
+
+  #merch .merch-totebags {
+    width: 540px;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
+
+  #merch .merch-totebags .merch-item {
+    padding: 12px;
+  }
+
+  #merch .merch-totebags .merch-item img {
+    height: 250px;
+    margin-bottom: 8px;
+  }
+
+  /* =========================================
+     STICKERS — 3 ARRIBA + 3 ABAJO
+     ========================================= */
+
+  #merch .merch-stickers {
+    width: 760px;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+
+  #merch .merch-stickers .merch-item {
+    padding: 10px;
+  }
+
+  #merch .merch-stickers .merch-item img {
+    height: 150px;
+    margin-bottom: 6px;
+  }
+
+  /* =========================================
+     INFORMACIÓN DE PRODUCTOS
+     ========================================= */
+
+  #merch .merch-name {
+    font-size: 0.88rem;
+  }
+
+  #merch .merch-price {
+    font-size: 1rem;
+    margin: 8px 0 12px;
+  }
+
+  #merch .merch-button {
+    font-size: 0.7rem;
+    padding: 9px 18px;
+  }
+
+}
