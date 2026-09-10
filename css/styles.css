@@ -3196,9 +3196,8 @@ aspect-ratio:2 / 3;
   /* Título principal */
 
   #merch .section-title {
-    color: #06181c !important;
-    font-size: 2rem;
-  }
+  font-size:2rem;
+}
 
   /* Títulos de categorías */
 
