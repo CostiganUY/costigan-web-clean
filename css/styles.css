@@ -2946,3 +2946,115 @@ aspect-ratio:2 / 3;
   }
 
 }
+
+/* =========================================================
+   MERCH — AJUSTE FINO
+   ========================================================= */
+
+#merch {
+  padding-top: 75px;
+  padding-bottom: 75px;
+}
+
+/* Menos separación general */
+
+.merch-grid {
+  gap: 25px;
+}
+
+/* REMERAS */
+
+.merch-grid.remeras .merch-item,
+.merch-grid.remers .merch-item {
+  padding: 18px;
+}
+
+.merch-grid.remeras .merch-item img,
+.merch-grid.remers .merch-item img {
+  height: 250px;
+  margin-bottom: 12px;
+}
+
+/* TOTEBAGS */
+
+.merch-grid.totebags {
+  gap: 25px;
+}
+
+.merch-grid.totebags .merch-item {
+  padding: 20px;
+}
+
+.merch-grid.totebags .merch-item img {
+  height: 300px;
+  margin-bottom: 12px;
+}
+
+/* STICKERS */
+
+.merch-grid.stickers {
+  gap: 22px;
+}
+
+.merch-grid.stickers .merch-item {
+  padding: 16px;
+}
+
+.merch-grid.stickers .merch-item img {
+  height: 190px;
+  margin-bottom: 10px;
+}
+
+/* Categorías un poco más compactas */
+
+.merch-category {
+  margin-top: 52px;
+  margin-bottom: 24px;
+}
+
+/* Promoción */
+
+.merch-promo {
+  margin-top: 35px;
+  padding: 20px 25px;
+}
+
+/* =========================================================
+   MERCH — AJUSTE FINO MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+  #merch {
+    padding-top: 60px;
+    padding-bottom: 60px;
+  }
+
+  .merch-grid {
+    gap: 20px;
+  }
+
+  .merch-grid.remeras .merch-item,
+  .merch-grid.remers .merch-item {
+    padding: 16px;
+  }
+
+  .merch-grid.remeras .merch-item img,
+  .merch-grid.remers .merch-item img {
+    height: 270px;
+  }
+
+  .merch-grid.totebags .merch-item img {
+    height: 300px;
+  }
+
+  .merch-grid.stickers .merch-item img {
+    height: 230px;
+  }
+
+  .merch-category {
+    margin-top: 45px;
+    margin-bottom: 20px;
+  }
+
+}
