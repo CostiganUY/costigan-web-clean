@@ -2675,7 +2675,6 @@ aspect-ratio:2 / 3;
 /* Título */
 
 #merch .section-title {
-  color: #06181c;
   margin-bottom: 18px;
 }
 
@@ -3178,12 +3177,6 @@ aspect-ratio:2 / 3;
    ========================================================= */
 
 @media (min-width: 901px) {
-
-  /* Título principal */
-
-  #merch .section-title {
-  font-size:2rem;
-}
 
   /* Títulos de categorías */
 
