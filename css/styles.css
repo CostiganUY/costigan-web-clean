@@ -851,7 +851,7 @@ TRANSICIÓN GALERÍA → DISCOGRAFÍA
 #discografia{
 
 background:#ece4cf;
-padding-top:120px;
+padding-top:45px;
 
 }
 
@@ -2668,7 +2668,7 @@ aspect-ratio:2 / 3;
 #merch {
   background: #ece4cf;
   color: #06181c;
-  padding: 90px 6vw;
+  padding: 45px 6vw;
   text-align: center;
 }
 
