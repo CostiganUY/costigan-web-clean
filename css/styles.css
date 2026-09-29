@@ -1276,7 +1276,7 @@ margin:auto;
 
 }
 
-.videos-grid .video-item:first-child {
+.video-grid .video-item:first-child {
     grid-column: 1 / -1;
 }
 
