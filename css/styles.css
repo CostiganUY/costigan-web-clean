@@ -1276,6 +1276,10 @@ margin:auto;
 
 }
 
+.videos-grid .video-item:first-child {
+    grid-column: 1 / -1;
+}
+
 /* animación al hover */
 
 .video-item:hover .video-title{
