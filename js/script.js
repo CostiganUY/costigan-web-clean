@@ -239,12 +239,14 @@ MINI PLAYER NAVBAR
 ========================= */
 
 const tracks = [
+"assets/audio/Botánico.mp3",
 "assets/audio/Amanda.mp3",
 "assets/audio/Balconeras.mp3",
 "assets/audio/Intrusión.mp3"
 ];
 
 const trackNames = [
+"ALGAS — Botánico",
 "ALGAS — Amanda",
 "ALGAS — Balconeras",
 "ALGAS — Intrusión"
