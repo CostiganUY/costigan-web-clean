@@ -737,107 +737,470 @@ margin-bottom:35px;
 }
 
 /* =========================
-GALLERY
+   GALLERY — EVENT CARDS
 ========================= */
 
 .gallery-grid{
 
 display:grid;
-grid-template-columns:repeat(3, 1fr);
-gap:18px;
 
-max-width:1200px;
+grid-template-columns:repeat(3,1fr);
+
+gap:28px;
+
+max-width:1100px;
+
 margin:auto;
 
 }
 
-.gallery-grid img{
 
-width:100%;
-margin-bottom:18px;
+/* =========================
+   GALLERY CARD
+========================= */
 
-border-radius:8px;
-
-break-inside:avoid;
-
-}
-
-.gallery-grid img{
-
-transition:
-transform 0.5s ease,
-box-shadow 0.4s ease,
-filter 0.4s ease;
-
-}
-
-.gallery-grid img:hover{
-
-transform:scale(1.04);
-
-filter:contrast(1.05) brightness(1.05);
-
-box-shadow:
-
-0 20px 60px rgba(0,0,0,0.8),
-0 0 20px rgba(175,82,73,0.25),
-0 0 60px rgba(175,82,73,0.15);
-
-}
-
-.gallery{
+.gallery-card{
 
 position:relative;
 
+overflow:hidden;
+
+border-radius:8px;
+
+cursor:pointer;
+
+background:#06181c;
+
+box-shadow:
+0 20px 50px rgba(0,0,0,0.45);
+
+transition:
+transform 0.4s ease,
+box-shadow 0.4s ease;
+
 }
 
-.gallery::before{
 
-content:"";
+.gallery-card:hover{
+
+transform:translateY(-8px);
+
+box-shadow:
+0 30px 70px rgba(0,0,0,0.65),
+0 0 30px rgba(175,82,73,0.18);
+
+}
+
+
+/* =========================
+   COVER IMAGE
+========================= */
+
+.gallery-card img{
+
+display:block;
+
+width:100%;
+
+aspect-ratio:4 / 3;
+
+object-fit:cover;
+
+transition:
+transform 0.6s ease,
+filter 0.5s ease;
+
+}
+
+
+.gallery-card:hover img{
+
+transform:scale(1.05);
+
+filter:
+brightness(1.08)
+contrast(1.04);
+
+}
+
+
+/* =========================
+   CARD INFO
+========================= */
+
+.gallery-card-info{
 
 position:absolute;
 
-inset:-120px;
+left:0;
+right:0;
+bottom:0;
 
-background:radial-gradient(
+padding:45px 22px 20px;
 
-circle at 50% 30%,
-rgba(175,82,73,0.18),
-transparent 70%
-
+background:
+linear-gradient(
+transparent,
+rgba(0,0,0,0.92)
 );
-
-filter:blur(60px);
-
-pointer-events:none;
-
-z-index:-1;
 
 }
 
-.gallery h2{
+
+.gallery-card-info h3{
+
+margin:0;
 
 font-family:'Bebas Neue', sans-serif;
 
-font-size:3rem;
+font-size:1.8rem;
 
-letter-spacing:5px;
+letter-spacing:3px;
+
+color:#ece4cf;
+
+}
+
+
+.gallery-card-info span{
+
+display:block;
+
+margin-top:4px;
+
+font-family:'Bebas Neue', sans-serif;
+
+font-size:0.75rem;
+
+letter-spacing:2px;
 
 color:#af5249;
 
-text-align:center;
+}
 
-margin-bottom:35px;
+
+/* =========================
+   GALLERY MODAL
+========================= */
+
+#galleryModal{
+
+position:fixed;
+
+inset:0;
+
+z-index:10000;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+background:rgba(0,0,0,0.96);
+
+opacity:0;
+
+pointer-events:none;
+
+transition:opacity 0.35s ease;
 
 }
+
+
+#galleryModal.active{
+
+opacity:1;
+
+pointer-events:auto;
+
+}
+
+
+/* =========================
+   MODAL CONTENT
+========================= */
+
+.gallery-modal-content{
+
+position:relative;
+
+display:flex;
+
+flex-direction:column;
+
+align-items:center;
+
+justify-content:center;
+
+width:min(85vw,1100px);
+
+height:90vh;
+
+}
+
+
+#galleryModalImg{
+
+display:block;
+
+max-width:100%;
+
+max-height:82vh;
+
+width:auto;
+
+height:auto;
+
+object-fit:contain;
+
+border-radius:6px;
+
+box-shadow:
+0 30px 100px rgba(0,0,0,0.9),
+0 0 40px rgba(175,82,73,0.15);
+
+animation:galleryImageIn 0.35s ease;
+
+}
+
+
+@keyframes galleryImageIn{
+
+from{
+
+opacity:0;
+
+transform:scale(0.96);
+
+}
+
+to{
+
+opacity:1;
+
+transform:scale(1);
+
+}
+
+}
+
+
+/* =========================
+   MODAL INFO
+========================= */
+
+.gallery-modal-info{
+
+display:flex;
+
+align-items:center;
+
+justify-content:space-between;
+
+width:100%;
+
+margin-top:12px;
+
+font-family:'Bebas Neue', sans-serif;
+
+letter-spacing:2px;
+
+}
+
+
+#galleryModalTitle{
+
+color:#ece4cf;
+
+font-size:1rem;
+
+}
+
+
+#galleryModalCounter{
+
+color:#af5249;
+
+font-size:0.9rem;
+
+}
+
+
+/* =========================
+   MODAL BUTTONS
+========================= */
+
+.gallery-modal-close,
+.gallery-prev,
+.gallery-next{
+
+position:absolute;
+
+border:none;
+
+background:none;
+
+color:#ece4cf;
+
+cursor:pointer;
+
+font-family:Arial, sans-serif;
+
+transition:
+color 0.25s ease,
+transform 0.25s ease,
+opacity 0.25s ease;
+
+z-index:2;
+
+}
+
+
+.gallery-modal-close{
+
+top:25px;
+
+right:35px;
+
+font-size:28px;
+
+opacity:0.7;
+
+}
+
+
+.gallery-prev,
+.gallery-next{
+
+top:50%;
+
+transform:translateY(-50%);
+
+font-size:70px;
+
+font-weight:200;
+
+opacity:0.65;
+
+}
+
+
+.gallery-prev{
+
+left:25px;
+
+}
+
+
+.gallery-next{
+
+right:25px;
+
+}
+
+
+.gallery-modal-close:hover,
+.gallery-prev:hover,
+.gallery-next:hover{
+
+color:#ff7a70;
+
+opacity:1;
+
+}
+
+
+.gallery-prev:hover{
+
+transform:translate(-4px,-50%);
+
+}
+
+
+.gallery-next:hover{
+
+transform:translate(4px,-50%);
+
+}
+
+
+/* =========================
+   GALLERY MOBILE
+========================= */
 
 @media (max-width:768px){
 
 .gallery-grid{
 
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:14px;
+grid-template-columns:1fr;
+
+gap:20px;
+
+}
+
+
+.gallery-card-info{
+
+padding:50px 18px 18px;
+
+}
+
+
+.gallery-card-info h3{
+
+font-size:1.6rem;
+
+}
+
+
+.gallery-modal-content{
+
+width:92vw;
+
+height:85vh;
+
+}
+
+
+#galleryModalImg{
+
+max-width:92vw;
+
+max-height:75vh;
+
+}
+
+
+.gallery-modal-close{
+
+top:18px;
+
+right:20px;
+
+font-size:24px;
+
+}
+
+
+.gallery-prev,
+.gallery-next{
+
+font-size:52px;
+
+}
+
+
+.gallery-prev{
+
+left:8px;
+
+}
+
+
+.gallery-next{
+
+right:8px;
 
 }
 
