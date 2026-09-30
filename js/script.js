@@ -116,44 +116,259 @@ window.addEventListener("scroll", revealSections, { passive:true });
 highlightNav();
 
 /* =========================
-GALLERY LIGHTBOX
+   GALLERY EVENT ALBUMS
 ========================= */
 
-const galleryImages = document.querySelectorAll(".gallery-grid img");
-const lightbox = document.getElementById("lightbox");
-const lightboxImg = document.querySelector(".lightbox-img");
-const closeBtn = document.querySelector(".lightbox-close");
+const galleries = {
 
-galleryImages.forEach(img => {
+  balzo: {
+    title: "BALZO",
+    images: [
+      "assets/img/gallery/balzo/Balzo1.webp",
+      "assets/img/gallery/balzo/Balzo2.webp",
+      "assets/img/gallery/balzo/Balzo3.webp",
+      "assets/img/gallery/balzo/Balzo4.webp",
+      "assets/img/gallery/balzo/Balzo5.webp"
+    ]
+  },
 
-img.addEventListener("click", () => {
+  barreiro: {
+    title: "BARREIRO",
+    images: [
+      "assets/img/gallery/barreiro/Barreiro1.webp",
+      "assets/img/gallery/barreiro/Barreiro2.webp",
+      "assets/img/gallery/barreiro/Barreiro3.webp"
+    ]
+  },
 
-lightbox.classList.add("active");
-lightboxImg.src = img.src;
+  film: {
+    title: "FILM",
+    images: [
+      "assets/img/gallery/film/Film1.webp",
+      "assets/img/gallery/film/Film2.webp",
+      "assets/img/gallery/film/Film3.webp",
+      "assets/img/gallery/film/Film4.webp",
+      "assets/img/gallery/film/Film5.webp",
+      "assets/img/gallery/film/Film6.webp",
+      "assets/img/gallery/film/Film7.webp",
+      "assets/img/gallery/film/Film8.webp",
+      "assets/img/gallery/film/Film9.webp",
+      "assets/img/gallery/film/Film10.webp",
+      "assets/img/gallery/film/Film11.webp",
+      "assets/img/gallery/film/Film12.webp",
+      "assets/img/gallery/film/Film13.webp",
+      "assets/img/gallery/film/Film14.webp",
+      "assets/img/gallery/film/Film15.webp",
+      "assets/img/gallery/film/Film16.webp",
+      "assets/img/gallery/film/Film17.webp",
+      "assets/img/gallery/film/Film18.webp",
+      "assets/img/gallery/film/Film19.webp",
+      "assets/img/gallery/film/Film20.webp"
+    ]
+  }
 
-});
+};
 
-});
 
-closeBtn.addEventListener("click", () => {
-lightbox.classList.remove("active");
-});
+const galleryCards = document.querySelectorAll(".gallery-card");
 
-lightbox.addEventListener("click", (e) => {
+const galleryModal = document.getElementById("galleryModal");
 
-if(e.target !== lightboxImg){
-lightbox.classList.remove("active");
+const galleryModalImg = document.getElementById("galleryModalImg");
+
+const galleryModalTitle = document.getElementById("galleryModalTitle");
+
+const galleryModalCounter = document.getElementById("galleryModalCounter");
+
+const galleryModalClose = document.querySelector(".gallery-modal-close");
+
+const galleryPrev = document.querySelector(".gallery-prev");
+
+const galleryNext = document.querySelector(".gallery-next");
+
+
+let currentGallery = null;
+
+let currentGalleryIndex = 0;
+
+
+/* =========================
+   OPEN GALLERY
+========================= */
+
+function openGallery(galleryName){
+
+  const gallery = galleries[galleryName];
+
+  if(!gallery) return;
+
+  currentGallery = gallery;
+
+  currentGalleryIndex = 0;
+
+  updateGalleryImage();
+
+  galleryModal.classList.add("active");
+
+  document.body.style.overflow = "hidden";
+
 }
 
-});
 
-document.addEventListener("keydown", (e) => {
+/* =========================
+   UPDATE IMAGE
+========================= */
 
-if(e.key === "Escape"){
-lightbox.classList.remove("active");
+function updateGalleryImage(){
+
+  if(!currentGallery) return;
+
+  galleryModalImg.src =
+    currentGallery.images[currentGalleryIndex];
+
+  galleryModalImg.alt =
+    currentGallery.title;
+
+  galleryModalTitle.textContent =
+    currentGallery.title;
+
+  galleryModalCounter.textContent =
+    `${currentGalleryIndex + 1} / ${currentGallery.images.length}`;
+
 }
 
+
+/* =========================
+   NEXT IMAGE
+========================= */
+
+function nextGalleryImage(){
+
+  if(!currentGallery) return;
+
+  currentGalleryIndex =
+    (currentGalleryIndex + 1) %
+    currentGallery.images.length;
+
+  updateGalleryImage();
+
+}
+
+
+/* =========================
+   PREVIOUS IMAGE
+========================= */
+
+function previousGalleryImage(){
+
+  if(!currentGallery) return;
+
+  currentGalleryIndex =
+    (currentGalleryIndex - 1 +
+    currentGallery.images.length) %
+    currentGallery.images.length;
+
+  updateGalleryImage();
+
+}
+
+
+/* =========================
+   CARD CLICK
+========================= */
+
+galleryCards.forEach(card => {
+
+  card.addEventListener("click", () => {
+
+    const galleryName =
+      card.getAttribute("data-gallery");
+
+    openGallery(galleryName);
+
+  });
+
 });
+
+
+/* =========================
+   BUTTONS
+========================= */
+
+galleryNext.addEventListener(
+  "click",
+  nextGalleryImage
+);
+
+galleryPrev.addEventListener(
+  "click",
+  previousGalleryImage
+);
+
+
+/* =========================
+   CLOSE
+========================= */
+
+function closeGallery(){
+
+  galleryModal.classList.remove("active");
+
+  document.body.style.overflow = "";
+
+}
+
+
+galleryModalClose.addEventListener(
+  "click",
+  closeGallery
+);
+
+
+galleryModal.addEventListener("click", e => {
+
+  if(e.target === galleryModal){
+
+    closeGallery();
+
+  }
+
+});
+
+
+/* =========================
+   KEYBOARD
+========================= */
+
+document.addEventListener("keydown", e => {
+
+  if(!galleryModal.classList.contains("active")){
+    return;
+  }
+
+  if(e.key === "Escape"){
+
+    closeGallery();
+
+  }
+
+  if(e.key === "ArrowRight"){
+
+    nextGalleryImage();
+
+  }
+
+  if(e.key === "ArrowLeft"){
+
+    previousGalleryImage();
+
+  }
+
+});
+
+/* =========================
+BIO LIGHTBOX
+========================= */
 
 const bioImage = document.querySelector(".bio-photo img");
 
