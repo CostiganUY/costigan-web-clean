@@ -669,3 +669,312 @@ if(modal){
     });
 
 }
+
+/* =========================
+   AFICHES — 3D COVERFLOW
+========================= */
+
+const posterCarousel = document.querySelector(".posters-carousel");
+
+if(posterCarousel){
+
+  const posterItems =
+    posterCarousel.querySelectorAll(".poster");
+
+  const posterPrev =
+    posterCarousel.querySelector(".poster-prev");
+
+  const posterNext =
+    posterCarousel.querySelector(".poster-next");
+
+
+  let posterCurrent = 0;
+
+  let posterTouchStartX = 0;
+  let posterTouchEndX = 0;
+
+  const posterTotal = posterItems.length;
+
+
+  /* =========================
+     ACTUALIZAR POSICIONES
+  ========================= */
+
+  function updatePosters(){
+
+    posterItems.forEach((poster, index) => {
+
+      poster.classList.remove(
+        "is-center",
+        "is-prev",
+        "is-next",
+        "is-prev-2",
+        "is-next-2",
+        "is-hidden"
+      );
+
+
+      let difference =
+        index - posterCurrent;
+
+
+      /*
+       * Convertimos la diferencia
+       * en una posición circular.
+       */
+
+      if(difference > posterTotal / 2){
+
+        difference -= posterTotal;
+
+      }
+
+      if(difference < -posterTotal / 2){
+
+        difference += posterTotal;
+
+      }
+
+
+      if(difference === 0){
+
+        poster.classList.add("is-center");
+
+      }
+
+      else if(difference === -1){
+
+        poster.classList.add("is-prev");
+
+      }
+
+      else if(difference === 1){
+
+        poster.classList.add("is-next");
+
+      }
+
+      else if(difference === -2){
+
+        poster.classList.add("is-prev-2");
+
+      }
+
+      else if(difference === 2){
+
+        poster.classList.add("is-next-2");
+
+      }
+
+      else{
+
+        poster.classList.add("is-hidden");
+
+      }
+
+    });
+
+  }
+
+
+  /* =========================
+     SIGUIENTE
+  ========================= */
+
+  function nextPoster(){
+
+    posterCurrent =
+      (posterCurrent + 1) % posterTotal;
+
+    updatePosters();
+
+  }
+
+
+  /* =========================
+     ANTERIOR
+  ========================= */
+
+  function previousPoster(){
+
+    posterCurrent =
+      (posterCurrent - 1 + posterTotal) %
+      posterTotal;
+
+    updatePosters();
+
+  }
+
+
+  /* =========================
+     FLECHAS
+  ========================= */
+
+  posterNext.addEventListener(
+    "click",
+    nextPoster
+  );
+
+
+  posterPrev.addEventListener(
+    "click",
+    previousPoster
+  );
+
+
+  /* =========================
+     CLICK EN LOS LATERALES
+  ========================= */
+
+  posterItems.forEach((poster, index) => {
+
+    poster.addEventListener("click", () => {
+
+      if(index === posterCurrent){
+        return;
+      }
+
+      let difference =
+        index - posterCurrent;
+
+
+      if(difference > posterTotal / 2){
+        difference -= posterTotal;
+      }
+
+      if(difference < -posterTotal / 2){
+        difference += posterTotal;
+      }
+
+
+      if(difference === -1){
+
+        previousPoster();
+
+      }
+
+      else if(difference === 1){
+
+        nextPoster();
+
+      }
+
+    });
+
+  });
+
+
+  /* =========================
+     TOUCH SWIPE
+  ========================= */
+
+  posterCarousel.addEventListener(
+    "touchstart",
+    e => {
+
+      posterTouchStartX =
+        e.changedTouches[0].screenX;
+
+    },
+    { passive:true }
+  );
+
+
+  posterCarousel.addEventListener(
+    "touchend",
+    e => {
+
+      posterTouchEndX =
+        e.changedTouches[0].screenX;
+
+
+      const swipeDistance =
+        posterTouchEndX - posterTouchStartX;
+
+
+      if(Math.abs(swipeDistance) < 50){
+        return;
+      }
+
+
+      if(swipeDistance < 0){
+
+        nextPoster();
+
+      }else{
+
+        previousPoster();
+
+      }
+
+    },
+    { passive:true }
+  );
+
+
+  /* =========================
+     KEYBOARD
+  ========================= */
+
+  document.addEventListener("keydown", e => {
+
+    /*
+     * Evitamos interferir con el
+     * teclado cuando el usuario
+     * está escribiendo.
+     */
+
+    const activeElement =
+      document.activeElement;
+
+    if(
+      activeElement &&
+      (
+        activeElement.tagName === "INPUT" ||
+        activeElement.tagName === "TEXTAREA" ||
+        activeElement.tagName === "SELECT"
+      )
+    ){
+
+      return;
+
+    }
+
+
+    const rect =
+      posterCarousel.getBoundingClientRect();
+
+
+    const carouselVisible =
+      rect.top < window.innerHeight &&
+      rect.bottom > 0;
+
+
+    if(!carouselVisible){
+      return;
+    }
+
+
+    if(e.key === "ArrowRight"){
+
+      nextPoster();
+
+    }
+
+
+    if(e.key === "ArrowLeft"){
+
+      previousPoster();
+
+    }
+
+  });
+
+
+  /* =========================
+     INICIALIZAR
+  ========================= */
+
+  updatePosters();
+
+}
