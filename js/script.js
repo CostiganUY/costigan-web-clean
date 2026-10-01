@@ -454,6 +454,46 @@ document.addEventListener("keydown", e => {
 });
 
 /* =========================
+   GALLERY TOUCH SWIPE
+========================= */
+
+let touchStartX = 0;
+let touchEndX = 0;
+
+galleryModal.addEventListener("touchstart", e => {
+
+  if(!galleryModal.classList.contains("active")){
+    return;
+  }
+
+  touchStartX = e.changedTouches[0].screenX;
+
+}, { passive:true });
+
+
+galleryModal.addEventListener("touchend", e => {
+
+  if(!galleryModal.classList.contains("active")){
+    return;
+  }
+
+  touchEndX = e.changedTouches[0].screenX;
+
+  const swipeDistance = touchEndX - touchStartX;
+
+  if(Math.abs(swipeDistance) < 50){
+    return;
+  }
+
+  if(swipeDistance < 0){
+    nextGalleryImage();
+  }else{
+    previousGalleryImage();
+  }
+
+});
+
+/* =========================
 BIO LIGHTBOX
 ========================= */
 
