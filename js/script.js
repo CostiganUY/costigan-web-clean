@@ -1,126 +1,140 @@
-/* =========================
-NAVBAR SCROLL EFFECT
-========================= */
+/* =========================================================
+   NAVBAR + SCROLL
+========================================================= */
 
-const nav = document.getElementById("mainNav");
+const navbar = document.getElementById("mainNav");
+const sections = document.querySelectorAll("section");
+const navLinks = document.querySelectorAll(".nav-left a, .nav-right a");
 
-if(nav){
+function revealSections() {
+  const trigger = window.scrollY + window.innerHeight - 120;
 
-window.addEventListener("scroll", () => {
-revealSections();
-highlightNav();
-}, { passive:true });
-
+  sections.forEach(section => {
+    if (trigger > section.offsetTop) {
+      section.classList.add("visible");
+    }
+  });
 }
 
+function highlightNav() {
+  const scrollPos = window.scrollY + window.innerHeight / 3;
 
-/* =========================
-SCROLL REVEAL SECTIONS
-========================= */
+  sections.forEach(section => {
+    if (
+      scrollPos >= section.offsetTop &&
+      scrollPos < section.offsetTop + section.offsetHeight
+    ) {
+      navLinks.forEach(link => {
+        link.classList.remove("nav-active");
 
-const sections = document.querySelectorAll("section");
+        if (link.getAttribute("href") === `#${section.id}`) {
+          link.classList.add("nav-active");
+        }
+      });
+    }
+  });
+}
 
-function revealSections(){
+let lastScroll = 0;
 
-const trigger = window.scrollY + window.innerHeight - 120;
+function handleScroll() {
+  revealSections();
+  highlightNav();
+
+  if (!navbar) return;
+
+  const currentScroll = window.pageYOffset;
+
+  if (currentScroll <= 0) {
+    navbar.style.transform = "translateY(0)";
+    lastScroll = currentScroll;
+    return;
+  }
+
+  if (currentScroll > lastScroll) {
+    navbar.style.transform = "translateY(-100%)";
+  } else {
+    navbar.style.transform = "translateY(0)";
+  }
+
+  lastScroll = currentScroll;
+}
+
+window.addEventListener("scroll", handleScroll, { passive: true });
+
+revealSections();
+highlightNav();
+
+
+/* =========================================================
+   SCROLL REVEAL
+========================================================= */
+
+const sectionObserver = new IntersectionObserver(
+  entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("visible");
+      }
+    });
+  },
+  {
+    threshold: 0.2
+  }
+);
 
 sections.forEach(section => {
-
-if(trigger > section.offsetTop){
-
-section.classList.add("visible");
-
-}
-
+  sectionObserver.observe(section);
 });
 
+
+/* =========================================================
+   HERO PARALLAX
+========================================================= */
+
+const heroBackground = document.querySelector(".hero-bg");
+
+if (heroBackground) {
+  window.addEventListener(
+    "scroll",
+    () => {
+      const offset = window.scrollY * 0.3;
+      heroBackground.style.transform = `translateY(${offset}px)`;
+    },
+    { passive: true }
+  );
 }
 
-revealSections();
 
-
-/* =========================
-HERO PARALLAX
-========================= */
-
-const hero = document.querySelector(".hero-bg");
-
-if(hero){
-
-window.addEventListener("scroll", () => {
-const offset = window.scrollY * 0.3;
-hero.style.transform = `translateY(${offset}px)`;
-});
-  
-}
-
-
-/* =========================
-SMOOTH SCROLL NAV
-========================= */
+/* =========================================================
+   SMOOTH SCROLL
+========================================================= */
 
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener("click", function (event) {
+    const targetSelector = this.getAttribute("href");
 
-anchor.addEventListener("click", function(e){
+    if (!targetSelector || targetSelector === "#") return;
 
-const target = document.querySelector(this.getAttribute("href"));
+    const target = document.querySelector(targetSelector);
 
-if(target){
+    if (!target) return;
 
-e.preventDefault();
+    event.preventDefault();
 
-target.scrollIntoView({
-behavior:"smooth"
+    target.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+  });
 });
 
-}
 
-});
-
-});
-
-/* =========================
-ACTIVE NAV SECTION GLOW
-========================= */
-
-const navLinks = document.querySelectorAll(".nav-left a, .nav-right a");
-const pageSections = document.querySelectorAll("section");
-
-function highlightNav(){
-
-let scrollPos = window.scrollY + window.innerHeight/3;
-
-pageSections.forEach(section => {
-
-if(scrollPos >= section.offsetTop && scrollPos < section.offsetTop + section.offsetHeight){
-
-navLinks.forEach(link => {
-
-link.classList.remove("nav-active");
-
-if(link.getAttribute("href") === "#" + section.id){
-
-link.classList.add("nav-active");
-
-}
-
-});
-
-}
-
-});
-
-}
-
-window.addEventListener("scroll", revealSections, { passive:true });
-highlightNav();
-
-/* =========================
-   GALLERY EVENT ALBUMS
-========================= */
+/* =========================================================
+   GALERÍAS — DATOS
+========================================================= */
 
 const galleries = {
-
   balzo: {
     title: "BALZO",
     images: [
@@ -253,413 +267,330 @@ const galleries = {
       "assets/img/gallery/newpalmer/Newpalmer7.webp"
     ]
   }
-
 };
 
 
+/* =========================================================
+   GALERÍA — MODAL
+========================================================= */
+
 const galleryCards = document.querySelectorAll(".gallery-card");
-
 const galleryModal = document.getElementById("galleryModal");
-
 const galleryModalImg = document.getElementById("galleryModalImg");
-
 const galleryModalTitle = document.getElementById("galleryModalTitle");
-
 const galleryModalCounter = document.getElementById("galleryModalCounter");
-
 const galleryModalClose = document.querySelector(".gallery-modal-close");
-
 const galleryPrev = document.querySelector(".gallery-prev");
-
 const galleryNext = document.querySelector(".gallery-next");
 
-
 let currentGallery = null;
-
 let currentGalleryIndex = 0;
 
+function updateGalleryImage() {
+  if (!currentGallery || !galleryModalImg) return;
 
-/* =========================
-   OPEN GALLERY
-========================= */
+  galleryModalImg.src =
+    currentGallery.images[currentGalleryIndex];
 
-function openGallery(galleryName){
+  galleryModalImg.alt = currentGallery.title;
 
+  if (galleryModalTitle) {
+    galleryModalTitle.textContent = currentGallery.title;
+  }
+
+  if (galleryModalCounter) {
+    galleryModalCounter.textContent =
+      `${currentGalleryIndex + 1} / ${currentGallery.images.length}`;
+  }
+}
+
+function openGallery(galleryName) {
   const gallery = galleries[galleryName];
 
-  if(!gallery) return;
+  if (!gallery || !galleryModal) return;
 
   currentGallery = gallery;
-
   currentGalleryIndex = 0;
 
   updateGalleryImage();
 
   galleryModal.classList.add("active");
-
   document.body.style.overflow = "hidden";
-
 }
 
+function closeGallery() {
+  if (!galleryModal) return;
 
-/* =========================
-   UPDATE IMAGE
-========================= */
-
-function updateGalleryImage(){
-
-  if(!currentGallery) return;
-
-  galleryModalImg.src =
-    currentGallery.images[currentGalleryIndex];
-
-  galleryModalImg.alt =
-    currentGallery.title;
-
-  galleryModalTitle.textContent =
-    currentGallery.title;
-
-  galleryModalCounter.textContent =
-    `${currentGalleryIndex + 1} / ${currentGallery.images.length}`;
-
+  galleryModal.classList.remove("active");
+  document.body.style.overflow = "";
 }
 
-
-/* =========================
-   NEXT IMAGE
-========================= */
-
-function nextGalleryImage(){
-
-  if(!currentGallery) return;
+function nextGalleryImage() {
+  if (!currentGallery) return;
 
   currentGalleryIndex =
     (currentGalleryIndex + 1) %
     currentGallery.images.length;
 
   updateGalleryImage();
-
 }
 
-
-/* =========================
-   PREVIOUS IMAGE
-========================= */
-
-function previousGalleryImage(){
-
-  if(!currentGallery) return;
+function previousGalleryImage() {
+  if (!currentGallery) return;
 
   currentGalleryIndex =
-    (currentGalleryIndex - 1 +
-    currentGallery.images.length) %
+    (currentGalleryIndex - 1 + currentGallery.images.length) %
     currentGallery.images.length;
 
   updateGalleryImage();
-
 }
-
-
-/* =========================
-   CARD CLICK
-========================= */
 
 galleryCards.forEach(card => {
-
   card.addEventListener("click", () => {
+    const galleryName = card.getAttribute("data-gallery");
 
-    const galleryName =
-      card.getAttribute("data-gallery");
-
-    openGallery(galleryName);
-
+    if (galleryName) {
+      openGallery(galleryName);
+    }
   });
-
 });
 
+if (galleryNext) {
+  galleryNext.addEventListener("click", nextGalleryImage);
+}
 
-/* =========================
-   BUTTONS
-========================= */
+if (galleryPrev) {
+  galleryPrev.addEventListener("click", previousGalleryImage);
+}
 
-galleryNext.addEventListener(
-  "click",
-  nextGalleryImage
-);
+if (galleryModalClose) {
+  galleryModalClose.addEventListener("click", closeGallery);
+}
 
-galleryPrev.addEventListener(
-  "click",
-  previousGalleryImage
-);
-
-
-/* =========================
-   CLOSE
-========================= */
-
-function closeGallery(){
-
-  galleryModal.classList.remove("active");
-
-  document.body.style.overflow = "";
-
+if (galleryModal) {
+  galleryModal.addEventListener("click", event => {
+    if (event.target === galleryModal) {
+      closeGallery();
+    }
+  });
 }
 
 
-galleryModalClose.addEventListener(
-  "click",
-  closeGallery
-);
+/* =========================================================
+   GALERÍA — TOUCH
+========================================================= */
+
+let galleryTouchStartX = 0;
+let galleryTouchEndX = 0;
+
+if (galleryModal) {
+  galleryModal.addEventListener(
+    "touchstart",
+    event => {
+      if (!galleryModal.classList.contains("active")) return;
+
+      galleryTouchStartX =
+        event.changedTouches[0].screenX;
+    },
+    { passive: true }
+  );
+
+  galleryModal.addEventListener(
+    "touchend",
+    event => {
+      if (!galleryModal.classList.contains("active")) return;
+
+      galleryTouchEndX =
+        event.changedTouches[0].screenX;
+
+      const swipeDistance =
+        galleryTouchEndX - galleryTouchStartX;
+
+      if (Math.abs(swipeDistance) < 50) return;
+
+      if (swipeDistance < 0) {
+        nextGalleryImage();
+      } else {
+        previousGalleryImage();
+      }
+    },
+    { passive: true }
+  );
+}
 
 
-galleryModal.addEventListener("click", e => {
+/* =========================================================
+   BIO — LIGHTBOX
+========================================================= */
 
-  if(e.target === galleryModal){
-
-    closeGallery();
-
-  }
-
-});
-
-
-/* =========================
-   KEYBOARD
-========================= */
-
-document.addEventListener("keydown", e => {
-
-  if(!galleryModal.classList.contains("active")){
-    return;
-  }
-
-  if(e.key === "Escape"){
-
-    closeGallery();
-
-  }
-
-  if(e.key === "ArrowRight"){
-
-    nextGalleryImage();
-
-  }
-
-  if(e.key === "ArrowLeft"){
-
-    previousGalleryImage();
-
-  }
-
-});
-
-/* =========================
-   GALLERY TOUCH SWIPE
-========================= */
-
-let touchStartX = 0;
-let touchEndX = 0;
-
-galleryModal.addEventListener("touchstart", e => {
-
-  if(!galleryModal.classList.contains("active")){
-    return;
-  }
-
-  touchStartX = e.changedTouches[0].screenX;
-
-}, { passive:true });
-
-
-galleryModal.addEventListener("touchend", e => {
-
-  if(!galleryModal.classList.contains("active")){
-    return;
-  }
-
-  touchEndX = e.changedTouches[0].screenX;
-
-  const swipeDistance = touchEndX - touchStartX;
-
-  if(Math.abs(swipeDistance) < 50){
-    return;
-  }
-
-  if(swipeDistance < 0){
-    nextGalleryImage();
-  }else{
-    previousGalleryImage();
-  }
-
-});
-
-/* =========================
-BIO LIGHTBOX
-========================= */
-
+const lightbox = document.getElementById("lightbox");
+const lightboxImg = document.querySelector(".lightbox-img");
+const lightboxClose = document.querySelector(".lightbox-close");
 const bioImage = document.querySelector(".bio-photo img");
 
-if(bioImage){
+function openLightbox(src, alt = "") {
+  if (!lightbox || !lightboxImg) return;
 
-bioImage.addEventListener("click", () => {
+  lightboxImg.src = src;
+  lightboxImg.alt = alt;
 
-lightbox.classList.add("active");
-lightboxImg.src = bioImage.src;
-
-});
-
+  lightbox.classList.add("active");
+  document.body.style.overflow = "hidden";
 }
 
-/* =========================
-NAVBAR DINAMICO
-========================= */
+function closeLightbox() {
+  if (!lightbox) return;
 
-let lastScroll = 0;
-const navbar = document.querySelector("#mainNav");
-
-window.addEventListener("scroll", () => {
-
-let currentScroll = window.pageYOffset;
-
-if(currentScroll <= 0){
-navbar.style.transform = "translateY(0)";
-return;
+  lightbox.classList.remove("active");
+  document.body.style.overflow = "";
 }
 
-if(currentScroll > lastScroll){
-navbar.style.transform = "translateY(-100%)";
-}else{
-navbar.style.transform = "translateY(0)";
+if (bioImage) {
+  bioImage.addEventListener("click", () => {
+    openLightbox(
+      bioImage.src,
+      bioImage.alt || "CÖSTIGAN"
+    );
+  });
 }
 
-lastScroll = currentScroll;
-
-});
-
-/* =========================
-SECCIONES FIX
-========================= */
-
-const observer = new IntersectionObserver(entries => {
-
-entries.forEach(entry => {
-
-if(entry.isIntersecting){
-entry.target.classList.add("visible");
+if (lightboxClose) {
+  lightboxClose.addEventListener("click", closeLightbox);
 }
 
-});
+if (lightbox) {
+  lightbox.addEventListener("click", event => {
+    if (event.target === lightbox) {
+      closeLightbox();
+    }
+  });
+}
 
-}, {
-threshold:0.2
-});
 
-sections.forEach(section => {
-observer.observe(section);
-});
-
-/* =========================
-MINI PLAYER NAVBAR
-========================= */
+/* =========================================================
+   MINI PLAYER
+========================================================= */
 
 const tracks = [
-"assets/audio/Botánico.mp3",
-"assets/audio/Amanda.mp3",
-"assets/audio/Balconeras.mp3",
-"assets/audio/Intrusión.mp3"
+  "assets/audio/Botánico.mp3",
+  "assets/audio/Amanda.mp3",
+  "assets/audio/Balconeras.mp3",
+  "assets/audio/Intrusión.mp3"
 ];
 
 const trackNames = [
-"ALGAS — Botánico",
-"ALGAS — Amanda",
-"ALGAS — Balconeras",
-"ALGAS — Intrusión"
+  "ALGAS — Botánico",
+  "ALGAS — Amanda",
+  "ALGAS — Balconeras",
+  "ALGAS — Intrusión"
 ];
 
 let currentTrack = 0;
 
 const audio = document.getElementById("mini-audio");
-const playBtn = document.getElementById("mini-play");
-const nextBtn = document.getElementById("mini-next");
-const title = document.getElementById("mini-title");
+const playButton = document.getElementById("mini-play");
+const nextButton = document.getElementById("mini-next");
+const miniTitle = document.getElementById("mini-title");
 
-if(audio){
+if (audio && playButton && nextButton && miniTitle) {
+  function loadTrack(index, autoplay = false) {
+    currentTrack = index;
 
-audio.src = tracks[currentTrack];
-title.textContent = trackNames[currentTrack];
+    audio.src = tracks[currentTrack];
+    miniTitle.textContent = trackNames[currentTrack];
 
-// intento autoplay (puede fallar)
-audio.play().catch(() => {
-console.log("Autoplay bloqueado");
-});
-
-// play / pause
-playBtn.addEventListener("click", () => {
-
-if(audio.paused){
-audio.play();
-playBtn.textContent = "⏸";
-}else{
-audio.pause();
-playBtn.textContent = "▶";
-}
-
-});
-
-// siguiente track
-nextBtn.addEventListener("click", () => {
-
-currentTrack = (currentTrack + 1) % tracks.length;
-
-audio.src = tracks[currentTrack];
-title.textContent = trackNames[currentTrack];
-
-audio.play();
-playBtn.textContent = "⏸";
-
-});
-
-}
-
-/* ==========================
-SHOW POPUP
-========================== */
-
-const modal = document.getElementById("showModal");
-const closeModal = document.querySelector(".show-close");
-
-if(modal){
-
-    window.addEventListener("load", () => {
-        modal.classList.add("active");
-    });
-
-    if(closeModal){
-
-        closeModal.addEventListener("click", () => {
-            modal.classList.remove("active");
+    if (autoplay) {
+      audio
+        .play()
+        .then(() => {
+          playButton.textContent = "⏸";
+        })
+        .catch(() => {
+          playButton.textContent = "▶";
         });
-
+    } else {
+      playButton.textContent = "▶";
     }
+  }
 
-    modal.addEventListener("click", (e) => {
+  audio.addEventListener("play", () => {
+    playButton.textContent = "⏸";
+  });
 
-        if(e.target === modal){
-            modal.classList.remove("active");
-        }
+  audio.addEventListener("pause", () => {
+    playButton.textContent = "▶";
+  });
 
+  audio.addEventListener("ended", () => {
+    const nextTrack =
+      (currentTrack + 1) % tracks.length;
+
+    loadTrack(nextTrack, true);
+  });
+
+  playButton.addEventListener("click", () => {
+    if (audio.paused) {
+      audio
+        .play()
+        .catch(() => {});
+    } else {
+      audio.pause();
+    }
+  });
+
+  nextButton.addEventListener("click", () => {
+    const nextTrack =
+      (currentTrack + 1) % tracks.length;
+
+    loadTrack(nextTrack, true);
+  });
+
+  loadTrack(0);
+
+  audio
+    .play()
+    .catch(() => {
+      console.log("Autoplay bloqueado");
     });
-
 }
 
-/* =========================
+
+/* =========================================================
+   SHOW POPUP
+========================================================= */
+
+const showModal = document.getElementById("showModal");
+const showClose = document.querySelector(".show-close");
+
+if (showModal) {
+  window.addEventListener("load", () => {
+    showModal.classList.add("active");
+  });
+
+  if (showClose) {
+    showClose.addEventListener("click", () => {
+      showModal.classList.remove("active");
+    });
+  }
+
+  showModal.addEventListener("click", event => {
+    if (event.target === showModal) {
+      showModal.classList.remove("active");
+    }
+  });
+}
+
+
+/* =========================================================
    AFICHES — 3D COVERFLOW
-========================= */
+========================================================= */
 
-const posterCarousel = document.querySelector(".posters-carousel");
+const posterCarousel =
+  document.querySelector(".posters-carousel");
 
-if(posterCarousel){
+let posterCoverflow = null;
 
+if (posterCarousel) {
   const posterItems =
     posterCarousel.querySelectorAll(".poster");
 
@@ -669,23 +600,14 @@ if(posterCarousel){
   const posterNext =
     posterCarousel.querySelector(".poster-next");
 
-
   let posterCurrent = 0;
-
   let posterTouchStartX = 0;
   let posterTouchEndX = 0;
 
   const posterTotal = posterItems.length;
 
-
-  /* =========================
-     ACTUALIZAR POSICIONES
-  ========================= */
-
-  function updatePosters(){
-
+  function updatePosters() {
     posterItems.forEach((poster, index) => {
-
       poster.classList.remove(
         "is-center",
         "is-prev",
@@ -695,296 +617,139 @@ if(posterCarousel){
         "is-hidden"
       );
 
+      let difference = index - posterCurrent;
 
-      let difference =
-        index - posterCurrent;
-
-
-      /*
-       * Convertimos la diferencia
-       * en una posición circular.
-       */
-
-      if(difference > posterTotal / 2){
-
+      if (difference > posterTotal / 2) {
         difference -= posterTotal;
-
       }
 
-      if(difference < -posterTotal / 2){
-
+      if (difference < -posterTotal / 2) {
         difference += posterTotal;
-
       }
 
-
-      if(difference === 0){
-
+      if (difference === 0) {
         poster.classList.add("is-center");
-
-      }
-
-      else if(difference === -1){
-
+      } else if (difference === -1) {
         poster.classList.add("is-prev");
-
-      }
-
-      else if(difference === 1){
-
+      } else if (difference === 1) {
         poster.classList.add("is-next");
-
-      }
-
-      else if(difference === -2){
-
+      } else if (difference === -2) {
         poster.classList.add("is-prev-2");
-
-      }
-
-      else if(difference === 2){
-
+      } else if (difference === 2) {
         poster.classList.add("is-next-2");
-
-      }
-
-      else{
-
+      } else {
         poster.classList.add("is-hidden");
-
       }
-
     });
-
   }
 
-
-  /* =========================
-     SIGUIENTE
-  ========================= */
-
-  function nextPoster(){
-
+  function nextPoster() {
     posterCurrent =
       (posterCurrent + 1) % posterTotal;
 
     updatePosters();
-
   }
 
-
-  /* =========================
-     ANTERIOR
-  ========================= */
-
-  function previousPoster(){
-
+  function previousPoster() {
     posterCurrent =
       (posterCurrent - 1 + posterTotal) %
       posterTotal;
 
     updatePosters();
-
   }
 
+  if (posterNext) {
+    posterNext.addEventListener("click", nextPoster);
+  }
 
-  /* =========================
-     FLECHAS
-  ========================= */
-
-  posterNext.addEventListener(
-    "click",
-    nextPoster
-  );
-
-
-  posterPrev.addEventListener(
-    "click",
-    previousPoster
-  );
-
-
-  /* =========================
-     CLICK EN LOS LATERALES
-  ========================= */
+  if (posterPrev) {
+    posterPrev.addEventListener(
+      "click",
+      previousPoster
+    );
+  }
 
   posterItems.forEach((poster, index) => {
-
     poster.addEventListener("click", () => {
-
-      if(index === posterCurrent){
-        return;
-      }
+      if (index === posterCurrent) return;
 
       let difference =
         index - posterCurrent;
 
-
-      if(difference > posterTotal / 2){
+      if (difference > posterTotal / 2) {
         difference -= posterTotal;
       }
 
-      if(difference < -posterTotal / 2){
+      if (difference < -posterTotal / 2) {
         difference += posterTotal;
       }
 
-
-      if(difference === -1){
-
+      if (difference === -1) {
         previousPoster();
-
-      }
-
-      else if(difference === 1){
-
+      } else if (difference === 1) {
         nextPoster();
-
       }
-
     });
-
   });
-
-
-  /* =========================
-     TOUCH SWIPE
-  ========================= */
 
   posterCarousel.addEventListener(
     "touchstart",
-    e => {
-
+    event => {
       posterTouchStartX =
-        e.changedTouches[0].screenX;
-
+        event.changedTouches[0].screenX;
     },
-    { passive:true }
+    { passive: true }
   );
-
 
   posterCarousel.addEventListener(
     "touchend",
-    e => {
-
+    event => {
       posterTouchEndX =
-        e.changedTouches[0].screenX;
-
+        event.changedTouches[0].screenX;
 
       const swipeDistance =
         posterTouchEndX - posterTouchStartX;
 
+      if (Math.abs(swipeDistance) < 50) return;
 
-      if(Math.abs(swipeDistance) < 50){
-        return;
-      }
-
-
-      if(swipeDistance < 0){
-
+      if (swipeDistance < 0) {
         nextPoster();
-
-      }else{
-
+      } else {
         previousPoster();
-
       }
-
     },
-    { passive:true }
+    { passive: true }
   );
 
-
-  /* =========================
-     KEYBOARD
-  ========================= */
-
-  document.addEventListener("keydown", e => {
-
-    /*
-     * Evitamos interferir con el
-     * teclado cuando el usuario
-     * está escribiendo.
-     */
-
-    const activeElement =
-      document.activeElement;
-
-    if(
-      activeElement &&
-      (
-        activeElement.tagName === "INPUT" ||
-        activeElement.tagName === "TEXTAREA" ||
-        activeElement.tagName === "SELECT"
-      )
-    ){
-
-      return;
-
-    }
-
-
-    const rect =
-      posterCarousel.getBoundingClientRect();
-
-
-    const carouselVisible =
-      rect.top < window.innerHeight &&
-      rect.bottom > 0;
-
-    if(
-  activeCoverflow &&
-  activeCoverflow !== null
-){
-  return;
-}
- 
-    if(!carouselVisible){
-      return;
-    }
-
-
-    if(e.key === "ArrowRight"){
-
-      nextPoster();
-
-    }
-
-
-    if(e.key === "ArrowLeft"){
-
-      previousPoster();
-
-    }
-
-  });
-
-
-  /* =========================
-     INICIALIZAR
-  ========================= */
+  posterCoverflow = {
+    element: posterCarousel,
+    next: nextPoster,
+    previous: previousPoster
+  };
 
   updatePosters();
-
 }
 
+
 /* =========================================================
-   VIDEOS / GALERÍA / MERCH / DISCOGRAFÍA
-   3D COVERFLOW SYSTEM
+   GENERIC 3D COVERFLOW
 ========================================================= */
 
-function initCoverflowCarousel(selector, options = {}){
+function initCoverflowCarousel(selector, options = {}) {
+  const carousel =
+    document.querySelector(selector);
 
-  const carousel = document.querySelector(selector);
-
-  if(!carousel){
-    return null;
-  }
+  if (!carousel) return null;
 
   const track =
     carousel.querySelector(".cf-track");
 
+  if (!track) return null;
+
   const items =
     Array.from(track.children);
+
+  if (!items.length) return null;
 
   const prevButton =
     carousel.querySelector(".cf-prev");
@@ -992,401 +757,206 @@ function initCoverflowCarousel(selector, options = {}){
   const nextButton =
     carousel.querySelector(".cf-next");
 
-  if(!track || !items.length){
-    return null;
-  }
-
   let current = 0;
-
   let touchStartX = 0;
   let touchEndX = 0;
-
   let swipeDetected = false;
 
   const total = items.length;
 
-
-  /* =====================================================
-     ACTUALIZAR
-  ===================================================== */
-
-  function update(){
-
+  function update() {
     items.forEach((item, index) => {
-
       item.classList.remove(
-        "cf-center",
-        "cf-prev",
-        "cf-next",
-        "cf-prev-2",
-        "cf-next-2",
-        "cf-hidden"
+        "cf-item-center",
+        "cf-item-prev",
+        "cf-item-next",
+        "cf-item-prev-2",
+        "cf-item-next-2",
+        "cf-item-hidden"
       );
 
       let difference =
         index - current;
 
-
-      /*
-       * Convertimos el índice en
-       * una posición circular.
-       */
-
-      if(difference > total / 2){
-
+      if (difference > total / 2) {
         difference -= total;
-
       }
 
-      if(difference < -total / 2){
-
+      if (difference < -total / 2) {
         difference += total;
-
       }
 
-
-      if(difference === 0){
-
-        item.classList.add("cf-center");
-
-      }
-
-      else if(difference === -1){
-
-        item.classList.add("cf-prev");
-
-      }
-
-      else if(difference === 1){
-
-        item.classList.add("cf-next");
-
-      }
-
-      /*
-       * Para carruseles pequeños,
-       * especialmente Discografía,
-       * no mostramos posiciones
-       * que puedan generar duplicados.
-       */
-
-      else if(
+      if (difference === 0) {
+        item.classList.add("cf-item-center");
+      } else if (difference === -1) {
+        item.classList.add("cf-item-prev");
+      } else if (difference === 1) {
+        item.classList.add("cf-item-next");
+      } else if (
         total >= 5 &&
         difference === -2
-      ){
-
-        item.classList.add("cf-prev-2");
-
-      }
-
-      else if(
+      ) {
+        item.classList.add("cf-item-prev-2");
+      } else if (
         total >= 5 &&
         difference === 2
-      ){
-
-        item.classList.add("cf-next-2");
-
+      ) {
+        item.classList.add("cf-item-next-2");
+      } else {
+        item.classList.add("cf-item-hidden");
       }
-
-      else{
-
-        item.classList.add("cf-hidden");
-
-      }
-
     });
-
   }
 
-
-  /* =====================================================
-     SIGUIENTE
-  ===================================================== */
-
-  function next(){
-
+  function next() {
     current =
       (current + 1) % total;
 
     update();
-
   }
 
-
-  /* =====================================================
-     ANTERIOR
-  ===================================================== */
-
-  function previous(){
-
+  function previous() {
     current =
       (current - 1 + total) % total;
 
     update();
-
   }
 
-
-  /* =====================================================
-     FLECHAS
-  ===================================================== */
-
-  if(nextButton){
-
+  if (nextButton) {
     nextButton.addEventListener(
       "click",
       next
     );
-
   }
 
-  if(prevButton){
-
+  if (prevButton) {
     prevButton.addEventListener(
       "click",
       previous
     );
-
   }
 
-
-  /* =====================================================
-     CLICK EN LOS ITEMS
-  ===================================================== */
-
   items.forEach((item, index) => {
-
     item.addEventListener("click", event => {
-
-      /*
-       * Si acabamos de hacer swipe,
-       * no queremos que el click posterior
-       * dispare otra acción.
-       */
-
-      if(swipeDetected){
-
+      if (swipeDetected) {
         swipeDetected = false;
-
         return;
-
       }
 
-
-      /*
-       * Los enlaces internos mantienen
-       * su comportamiento normal.
-       *
-       * Esto es importante para MERCH
-       * y DISCOGRAFÍA.
-       */
-
-      if(event.target.closest("a")){
-
+      if (event.target.closest("a, button")) {
         return;
-
       }
-
 
       let difference =
         index - current;
 
-
-      if(difference > total / 2){
-
+      if (difference > total / 2) {
         difference -= total;
-
       }
 
-      if(difference < -total / 2){
-
+      if (difference < -total / 2) {
         difference += total;
-
       }
 
-
-      /*
-       * ITEM LATERAL IZQUIERDO
-       */
-
-      if(difference === -1){
-
+      if (difference === -1) {
         previous();
-
         return;
-
       }
 
-
-      /*
-       * ITEM LATERAL DERECHO
-       */
-
-      if(difference === 1){
-
+      if (difference === 1) {
         next();
-
         return;
-
       }
 
-
-      /*
-       * ITEM CENTRAL
-       */
-
-      if(difference === 0){
-
-        if(
-          typeof options.onCenterClick ===
-          "function"
-        ){
-
-          options.onCenterClick(item);
-
-        }
-
+      if (
+        difference === 0 &&
+        typeof options.onCenterClick === "function"
+      ) {
+        options.onCenterClick(item);
       }
-
     });
-
   });
-
-
-  /* =====================================================
-     TOUCH START
-  ===================================================== */
 
   carousel.addEventListener(
     "touchstart",
     event => {
-
       touchStartX =
         event.changedTouches[0].screenX;
 
       swipeDetected = false;
-
     },
-    { passive:true }
+    { passive: true }
   );
-
-
-  /* =====================================================
-     TOUCH END
-  ===================================================== */
 
   carousel.addEventListener(
     "touchend",
     event => {
-
       touchEndX =
         event.changedTouches[0].screenX;
-
 
       const distance =
         touchEndX - touchStartX;
 
-
-      if(Math.abs(distance) < 50){
-
+      if (Math.abs(distance) < 50) {
         return;
-
       }
-
 
       swipeDetected = true;
 
-
-      if(distance < 0){
-
+      if (distance < 0) {
         next();
-
-      }else{
-
+      } else {
         previous();
-
       }
-
     },
-    { passive:true }
+    { passive: true }
   );
 
-
-  /* =====================================================
-     EXPONER CONTROL
-  ===================================================== */
+  update();
 
   return {
-
+    element: carousel,
     next,
     previous,
     update,
     getCurrent: () => current
-
   };
-
 }
 
 
 /* =========================================================
-   VIDEOS
+   COVERFLOW — INSTANCIAS
 ========================================================= */
 
 const videoCoverflow =
-  initCoverflowCarousel(
-    ".video-carousel",
-    {
+  initCoverflowCarousel(".video-carousel", {
+    onCenterClick: item => {
+      const link =
+        item.getAttribute("data-link");
 
-      onCenterClick: item => {
-
-        const link =
-          item.getAttribute("data-link");
-
-        if(link){
-
-          window.open(
-            link,
-            "_blank",
-            "noopener"
-          );
-
-        }
-
+      if (link) {
+        window.open(
+          link,
+          "_blank",
+          "noopener,noreferrer"
+        );
       }
-
     }
-  );
+  });
 
-
-/* =========================================================
-   GALERÍA
-========================================================= */
 
 const galleryCoverflow =
-  initCoverflowCarousel(
-    ".gallery-carousel",
-    {
+  initCoverflowCarousel(".gallery-carousel", {
+    onCenterClick: item => {
+      const galleryName =
+        item.getAttribute("data-gallery");
 
-      onCenterClick: item => {
-
-        const galleryName =
-          item.getAttribute("data-gallery");
-
-        if(galleryName){
-
-          openGallery(galleryName);
-
-        }
-
+      if (galleryName) {
+        openGallery(galleryName);
       }
-
     }
-  );
+  });
 
-
-/* =========================================================
-   MERCH — REMERAS
-========================================================= */
 
 const shirtsCoverflow =
   initCoverflowCarousel(
@@ -1394,29 +964,17 @@ const shirtsCoverflow =
   );
 
 
-/* =========================================================
-   MERCH — TOTEBAGS
-========================================================= */
-
 const totebagsCoverflow =
   initCoverflowCarousel(
     ".merch-totebags-carousel"
   );
 
 
-/* =========================================================
-   MERCH — STICKERS
-========================================================= */
-
 const stickersCoverflow =
   initCoverflowCarousel(
     ".merch-stickers-carousel"
   );
 
-
-/* =========================================================
-   DISCOGRAFÍA
-========================================================= */
 
 const discographyCoverflow =
   initCoverflowCarousel(
@@ -1425,141 +983,105 @@ const discographyCoverflow =
 
 
 /* =========================================================
-   TECLADO
-   Un único listener para todos los coverflows nuevos.
+   COVERFLOWS ACTIVOS — TECLADO
 ========================================================= */
 
 const coverflowCarousels = [
-  {
-    element:
-      document.querySelector(".video-carousel"),
-    controller:
-      videoCoverflow
-  },
-
-  {
-    element:
-      document.querySelector(".gallery-carousel"),
-    controller:
-      galleryCoverflow
-  },
-
-  {
-    element:
-      document.querySelector(".merch-shirts-carousel"),
-    controller:
-      shirtsCoverflow
-  },
-
-  {
-    element:
-      document.querySelector(".merch-totebags-carousel"),
-    controller:
-      totebagsCoverflow
-  },
-
-  {
-    element:
-      document.querySelector(".merch-stickers-carousel"),
-    controller:
-      stickersCoverflow
-  },
-
-  {
-    element:
-      document.querySelector(".discography-carousel"),
-    controller:
-      discographyCoverflow
-  }
-].filter(item =>
-  item.element &&
-  item.controller
-);
-
+  posterCoverflow,
+  videoCoverflow,
+  galleryCoverflow,
+  shirtsCoverflow,
+  totebagsCoverflow,
+  stickersCoverflow,
+  discographyCoverflow
+].filter(Boolean);
 
 let activeCoverflow = null;
 
-
-/* =====================================================
-   DETECTAR SOBRE QUÉ CARRUSEL ESTÁ EL MOUSE
-===================================================== */
-
-coverflowCarousels.forEach(item => {
-
-  item.element.addEventListener(
+coverflowCarousels.forEach(controller => {
+  controller.element.addEventListener(
     "mouseenter",
     () => {
-
-      activeCoverflow =
-        item.controller;
-
+      activeCoverflow = controller;
     }
   );
 
+  controller.element.addEventListener(
+    "mouseleave",
+    () => {
+      if (activeCoverflow === controller) {
+        activeCoverflow = null;
+      }
+    }
+  );
 });
 
 
-/* =====================================================
-   TECLADO
-===================================================== */
+/* =========================================================
+   TECLADO GLOBAL
+========================================================= */
 
-document.addEventListener(
-  "keydown",
-  event => {
+document.addEventListener("keydown", event => {
+  const activeElement =
+    document.activeElement;
 
-    const activeElement =
-      document.activeElement;
-
-
-    if(
-      activeElement &&
-      (
-        activeElement.tagName === "INPUT" ||
-        activeElement.tagName === "TEXTAREA" ||
-        activeElement.tagName === "SELECT"
-      )
-    ){
-
-      return;
-
-    }
-
-
-    /*
-     * Si la galería modal está abierta,
-     * dejamos que su propio teclado
-     * maneje las flechas.
-     */
-
-    if(
-      galleryModal &&
-      galleryModal.classList.contains("active")
-    ){
-
-      return;
-
-    }
-
-
-    if(!activeCoverflow){
-
-      return;
-
-    }
-
-
-    if(event.key === "ArrowRight"){
-
-      activeCoverflow.next();
-
-    }
-
-
-    if(event.key === "ArrowLeft"){
-
-      activeCoverflow.previous();
-
-    }
-
+  if (
+    activeElement &&
+    (
+      activeElement.tagName === "INPUT" ||
+      activeElement.tagName === "TEXTAREA" ||
+      activeElement.tagName === "SELECT"
+    )
+  ) {
+    return;
   }
-);
+
+  /* Modal de galería */
+
+  if (
+    galleryModal &&
+    galleryModal.classList.contains("active")
+  ) {
+    if (event.key === "Escape") {
+      closeGallery();
+      return;
+    }
+
+    if (event.key === "ArrowRight") {
+      nextGalleryImage();
+      return;
+    }
+
+    if (event.key === "ArrowLeft") {
+      previousGalleryImage();
+      return;
+    }
+
+    return;
+  }
+
+  /* Lightbox */
+
+  if (
+    lightbox &&
+    lightbox.classList.contains("active")
+  ) {
+    if (event.key === "Escape") {
+      closeLightbox();
+    }
+
+    return;
+  }
+
+  /* Coverflows */
+
+  if (!activeCoverflow) return;
+
+  if (event.key === "ArrowRight") {
+    activeCoverflow.next();
+  }
+
+  if (event.key === "ArrowLeft") {
+    activeCoverflow.previous();
+  }
+});
