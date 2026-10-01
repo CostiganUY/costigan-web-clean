@@ -537,24 +537,6 @@ lastScroll = currentScroll;
 });
 
 /* =========================
-VIDEOS FIX
-========================= */
-
-document.querySelectorAll(".video-item").forEach(video => {
-
-  video.addEventListener("click", () => {
-
-    const link = video.getAttribute("data-link");
-
-    if(link){
-      window.open(link, "_blank");
-    }
-
-  });
-
-});
-
-/* =========================
 SECCIONES FIX
 ========================= */
 
@@ -949,7 +931,13 @@ if(posterCarousel){
       rect.top < window.innerHeight &&
       rect.bottom > 0;
 
-
+    if(
+  activeCoverflow &&
+  activeCoverflow !== null
+){
+  return;
+}
+ 
     if(!carouselVisible){
       return;
     }
@@ -978,3 +966,600 @@ if(posterCarousel){
   updatePosters();
 
 }
+
+/* =========================================================
+   VIDEOS / GALERÍA / MERCH / DISCOGRAFÍA
+   3D COVERFLOW SYSTEM
+========================================================= */
+
+function initCoverflowCarousel(selector, options = {}){
+
+  const carousel = document.querySelector(selector);
+
+  if(!carousel){
+    return null;
+  }
+
+  const track =
+    carousel.querySelector(".cf-track");
+
+  const items =
+    Array.from(track.children);
+
+  const prevButton =
+    carousel.querySelector(".cf-prev");
+
+  const nextButton =
+    carousel.querySelector(".cf-next");
+
+  if(!track || !items.length){
+    return null;
+  }
+
+  let current = 0;
+
+  let touchStartX = 0;
+  let touchEndX = 0;
+
+  let swipeDetected = false;
+
+  const total = items.length;
+
+
+  /* =====================================================
+     ACTUALIZAR
+  ===================================================== */
+
+  function update(){
+
+    items.forEach((item, index) => {
+
+      item.classList.remove(
+        "cf-center",
+        "cf-prev",
+        "cf-next",
+        "cf-prev-2",
+        "cf-next-2",
+        "cf-hidden"
+      );
+
+      let difference =
+        index - current;
+
+
+      /*
+       * Convertimos el índice en
+       * una posición circular.
+       */
+
+      if(difference > total / 2){
+
+        difference -= total;
+
+      }
+
+      if(difference < -total / 2){
+
+        difference += total;
+
+      }
+
+
+      if(difference === 0){
+
+        item.classList.add("cf-center");
+
+      }
+
+      else if(difference === -1){
+
+        item.classList.add("cf-prev");
+
+      }
+
+      else if(difference === 1){
+
+        item.classList.add("cf-next");
+
+      }
+
+      /*
+       * Para carruseles pequeños,
+       * especialmente Discografía,
+       * no mostramos posiciones
+       * que puedan generar duplicados.
+       */
+
+      else if(
+        total >= 5 &&
+        difference === -2
+      ){
+
+        item.classList.add("cf-prev-2");
+
+      }
+
+      else if(
+        total >= 5 &&
+        difference === 2
+      ){
+
+        item.classList.add("cf-next-2");
+
+      }
+
+      else{
+
+        item.classList.add("cf-hidden");
+
+      }
+
+    });
+
+  }
+
+
+  /* =====================================================
+     SIGUIENTE
+  ===================================================== */
+
+  function next(){
+
+    current =
+      (current + 1) % total;
+
+    update();
+
+  }
+
+
+  /* =====================================================
+     ANTERIOR
+  ===================================================== */
+
+  function previous(){
+
+    current =
+      (current - 1 + total) % total;
+
+    update();
+
+  }
+
+
+  /* =====================================================
+     FLECHAS
+  ===================================================== */
+
+  if(nextButton){
+
+    nextButton.addEventListener(
+      "click",
+      next
+    );
+
+  }
+
+  if(prevButton){
+
+    prevButton.addEventListener(
+      "click",
+      previous
+    );
+
+  }
+
+
+  /* =====================================================
+     CLICK EN LOS ITEMS
+  ===================================================== */
+
+  items.forEach((item, index) => {
+
+    item.addEventListener("click", event => {
+
+      /*
+       * Si acabamos de hacer swipe,
+       * no queremos que el click posterior
+       * dispare otra acción.
+       */
+
+      if(swipeDetected){
+
+        swipeDetected = false;
+
+        return;
+
+      }
+
+
+      /*
+       * Los enlaces internos mantienen
+       * su comportamiento normal.
+       *
+       * Esto es importante para MERCH
+       * y DISCOGRAFÍA.
+       */
+
+      if(event.target.closest("a")){
+
+        return;
+
+      }
+
+
+      let difference =
+        index - current;
+
+
+      if(difference > total / 2){
+
+        difference -= total;
+
+      }
+
+      if(difference < -total / 2){
+
+        difference += total;
+
+      }
+
+
+      /*
+       * ITEM LATERAL IZQUIERDO
+       */
+
+      if(difference === -1){
+
+        previous();
+
+        return;
+
+      }
+
+
+      /*
+       * ITEM LATERAL DERECHO
+       */
+
+      if(difference === 1){
+
+        next();
+
+        return;
+
+      }
+
+
+      /*
+       * ITEM CENTRAL
+       */
+
+      if(difference === 0){
+
+        if(
+          typeof options.onCenterClick ===
+          "function"
+        ){
+
+          options.onCenterClick(item);
+
+        }
+
+      }
+
+    });
+
+  });
+
+
+  /* =====================================================
+     TOUCH START
+  ===================================================== */
+
+  carousel.addEventListener(
+    "touchstart",
+    event => {
+
+      touchStartX =
+        event.changedTouches[0].screenX;
+
+      swipeDetected = false;
+
+    },
+    { passive:true }
+  );
+
+
+  /* =====================================================
+     TOUCH END
+  ===================================================== */
+
+  carousel.addEventListener(
+    "touchend",
+    event => {
+
+      touchEndX =
+        event.changedTouches[0].screenX;
+
+
+      const distance =
+        touchEndX - touchStartX;
+
+
+      if(Math.abs(distance) < 50){
+
+        return;
+
+      }
+
+
+      swipeDetected = true;
+
+
+      if(distance < 0){
+
+        next();
+
+      }else{
+
+        previous();
+
+      }
+
+    },
+    { passive:true }
+  );
+
+
+  /* =====================================================
+     EXPONER CONTROL
+  ===================================================== */
+
+  return {
+
+    next,
+    previous,
+    update,
+    getCurrent: () => current
+
+  };
+
+}
+
+
+/* =========================================================
+   VIDEOS
+========================================================= */
+
+const videoCoverflow =
+  initCoverflowCarousel(
+    ".video-carousel",
+    {
+
+      onCenterClick: item => {
+
+        const link =
+          item.getAttribute("data-link");
+
+        if(link){
+
+          window.open(
+            link,
+            "_blank",
+            "noopener"
+          );
+
+        }
+
+      }
+
+    }
+  );
+
+
+/* =========================================================
+   GALERÍA
+========================================================= */
+
+const galleryCoverflow =
+  initCoverflowCarousel(
+    ".gallery-carousel",
+    {
+
+      onCenterClick: item => {
+
+        const galleryName =
+          item.getAttribute("data-gallery");
+
+        if(galleryName){
+
+          openGallery(galleryName);
+
+        }
+
+      }
+
+    }
+  );
+
+
+/* =========================================================
+   MERCH — REMERAS
+========================================================= */
+
+const shirtsCoverflow =
+  initCoverflowCarousel(
+    ".merch-shirts-carousel"
+  );
+
+
+/* =========================================================
+   MERCH — TOTEBAGS
+========================================================= */
+
+const totebagsCoverflow =
+  initCoverflowCarousel(
+    ".merch-totebags-carousel"
+  );
+
+
+/* =========================================================
+   MERCH — STICKERS
+========================================================= */
+
+const stickersCoverflow =
+  initCoverflowCarousel(
+    ".merch-stickers-carousel"
+  );
+
+
+/* =========================================================
+   DISCOGRAFÍA
+========================================================= */
+
+const discographyCoverflow =
+  initCoverflowCarousel(
+    ".discography-carousel"
+  );
+
+
+/* =========================================================
+   TECLADO
+   Un único listener para todos los coverflows nuevos.
+========================================================= */
+
+const coverflowCarousels = [
+  {
+    element:
+      document.querySelector(".video-carousel"),
+    controller:
+      videoCoverflow
+  },
+
+  {
+    element:
+      document.querySelector(".gallery-carousel"),
+    controller:
+      galleryCoverflow
+  },
+
+  {
+    element:
+      document.querySelector(".merch-shirts-carousel"),
+    controller:
+      shirtsCoverflow
+  },
+
+  {
+    element:
+      document.querySelector(".merch-totebags-carousel"),
+    controller:
+      totebagsCoverflow
+  },
+
+  {
+    element:
+      document.querySelector(".merch-stickers-carousel"),
+    controller:
+      stickersCoverflow
+  },
+
+  {
+    element:
+      document.querySelector(".discography-carousel"),
+    controller:
+      discographyCoverflow
+  }
+].filter(item =>
+  item.element &&
+  item.controller
+);
+
+
+let activeCoverflow = null;
+
+
+/* =====================================================
+   DETECTAR SOBRE QUÉ CARRUSEL ESTÁ EL MOUSE
+===================================================== */
+
+coverflowCarousels.forEach(item => {
+
+  item.element.addEventListener(
+    "mouseenter",
+    () => {
+
+      activeCoverflow =
+        item.controller;
+
+    }
+  );
+
+});
+
+
+/* =====================================================
+   TECLADO
+===================================================== */
+
+document.addEventListener(
+  "keydown",
+  event => {
+
+    const activeElement =
+      document.activeElement;
+
+
+    if(
+      activeElement &&
+      (
+        activeElement.tagName === "INPUT" ||
+        activeElement.tagName === "TEXTAREA" ||
+        activeElement.tagName === "SELECT"
+      )
+    ){
+
+      return;
+
+    }
+
+
+    /*
+     * Si la galería modal está abierta,
+     * dejamos que su propio teclado
+     * maneje las flechas.
+     */
+
+    if(
+      galleryModal &&
+      galleryModal.classList.contains("active")
+    ){
+
+      return;
+
+    }
+
+
+    if(!activeCoverflow){
+
+      return;
+
+    }
+
+
+    if(event.key === "ArrowRight"){
+
+      activeCoverflow.next();
+
+    }
+
+
+    if(event.key === "ArrowLeft"){
+
+      activeCoverflow.previous();
+
+    }
+
+  }
+);
