@@ -4078,3 +4078,474 @@ right:4px;
   }
 
 }
+
+/* =========================================================
+   VIDEOS / GALERÍA / MERCH / DISCOGRAFÍA
+   3D COVERFLOW
+========================================================= */
+
+.cf-carousel{
+position:relative;
+width:100%;
+max-width:1200px;
+margin:60px auto 0;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.cf-track{
+position:relative;
+width:100%;
+height:560px;
+display:flex !important;
+align-items:center;
+justify-content:center;
+perspective:1200px;
+overflow:hidden;
+}
+
+/* =========================================================
+   ITEMS GENERALES
+========================================================= */
+
+.cf-track > *{
+position:absolute !important;
+left:50%;
+top:50%;
+margin:0 !important;
+cursor:pointer;
+transform-origin:center center;
+
+transition:
+transform 0.55s cubic-bezier(0.22,0.61,0.36,1),
+opacity 0.55s ease,
+filter 0.55s ease,
+box-shadow 0.55s ease;
+
+will-change:transform,opacity;
+}
+
+/* =========================================================
+   POSICIÓN CENTRAL
+========================================================= */
+
+.cf-track > *.cf-center{
+transform:
+translate3d(-50%,-50%,80px)
+scale(1);
+
+opacity:1;
+z-index:5;
+filter:none;
+}
+
+/* =========================================================
+   IZQUIERDA
+========================================================= */
+
+.cf-track > *.cf-prev{
+transform:
+translate3d(calc(-50% - 330px),-50%,0)
+rotateY(28deg)
+scale(0.78);
+
+opacity:.48;
+z-index:3;
+filter:brightness(.82);
+}
+
+/* =========================================================
+   DERECHA
+========================================================= */
+
+.cf-track > *.cf-next{
+transform:
+translate3d(calc(-50% + 330px),-50%,0)
+rotateY(-28deg)
+scale(.78);
+
+opacity:.48;
+z-index:3;
+filter:brightness(.82);
+}
+
+/* =========================================================
+   SEGUNDA POSICIÓN
+========================================================= */
+
+.cf-track > *.cf-prev-2{
+transform:
+translate3d(calc(-50% - 530px),-50%,0)
+rotateY(38deg)
+scale(.62);
+
+opacity:.16;
+z-index:2;
+filter:brightness(.65);
+}
+
+.cf-track > *.cf-next-2{
+transform:
+translate3d(calc(-50% + 530px),-50%,0)
+rotateY(-38deg)
+scale(.62);
+
+opacity:.16;
+z-index:2;
+filter:brightness(.65);
+}
+
+/* =========================================================
+   OCULTOS
+========================================================= */
+
+.cf-track > *.cf-hidden{
+transform:
+translate3d(-50%,-50%,0)
+scale(.5);
+
+opacity:0;
+z-index:1;
+pointer-events:none;
+}
+
+/* =========================================================
+   FLECHAS
+========================================================= */
+
+.cf-arrow{
+position:absolute;
+top:50%;
+transform:translateY(-50%);
+
+width:48px;
+height:48px;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+border:1px solid rgba(6,24,28,.15);
+border-radius:50%;
+
+background:rgba(255,255,255,.78);
+color:#06181c;
+
+font-family:inherit;
+font-size:36px;
+line-height:1;
+
+cursor:pointer;
+
+z-index:20;
+
+transition:
+background .3s ease,
+transform .3s ease,
+box-shadow .3s ease;
+
+backdrop-filter:blur(8px);
+}
+
+.cf-prev{
+left:10px;
+}
+
+.cf-next{
+right:10px;
+}
+
+.cf-arrow:hover{
+transform:translateY(-50%) scale(1.08);
+background:rgba(255,255,255,.95);
+
+box-shadow:
+0 10px 30px rgba(6,24,28,.15);
+}
+
+/* =========================================================
+   VIDEOS
+========================================================= */
+
+.video-carousel .cf-track{
+height:560px;
+}
+
+.video-carousel .video-item{
+width:560px;
+max-width:560px;
+
+background:#06181c;
+border-radius:10px;
+overflow:hidden;
+
+box-shadow:
+0 20px 50px rgba(0,0,0,.45);
+}
+
+.video-carousel .video-item.cf-center{
+box-shadow:
+0 25px 60px rgba(6,24,28,.25);
+}
+
+.video-carousel .video-item.cf-center:hover{
+transform:
+translate3d(-50%,-50%,80px)
+scale(1.015);
+}
+
+.video-carousel .video-item iframe{
+width:100%;
+height:315px;
+display:block;
+}
+
+.video-carousel .video-title{
+z-index:3;
+}
+
+/* =========================================================
+   GALERÍA
+========================================================= */
+
+.gallery-carousel .cf-track{
+height:560px;
+}
+
+.gallery-carousel .gallery-card{
+width:520px;
+max-width:520px;
+
+background:#06181c;
+border-radius:8px;
+
+box-shadow:
+0 20px 50px rgba(0,0,0,.45);
+}
+
+.gallery-carousel .gallery-card.cf-center{
+box-shadow:
+0 25px 60px rgba(0,0,0,.28);
+}
+
+.gallery-carousel .gallery-card img{
+width:100%;
+aspect-ratio:4 / 3;
+object-fit:cover;
+}
+
+.gallery-carousel .gallery-card.cf-center:hover{
+transform:
+translate3d(-50%,-50%,80px)
+scale(1.015);
+}
+
+/* =========================================================
+   MERCH
+========================================================= */
+
+.merch-carousel{
+max-width:1000px;
+margin-top:35px;
+}
+
+.merch-carousel .cf-track{
+height:510px;
+}
+
+.merch-carousel .merch-item{
+width:300px;
+max-width:300px;
+
+padding:22px;
+
+background:rgba(255,255,255,.28);
+border:1px solid rgba(6,24,28,.12);
+border-radius:12px;
+
+box-shadow:
+0 15px 40px rgba(6,24,28,.08);
+}
+
+.merch-carousel .merch-item.cf-center{
+box-shadow:
+0 25px 60px rgba(6,24,28,.16);
+}
+
+.merch-carousel .merch-item.cf-center:hover{
+transform:
+translate3d(-50%,-50%,80px)
+scale(1.015);
+}
+
+/* evitar que el hover antiguo del grid interfiera */
+
+.merch-carousel .merch-item:hover{
+transform:
+translate3d(-50%,-50%,80px)
+scale(1.015);
+}
+
+/* tamaños específicos */
+
+.merch-shirts-carousel .cf-track{
+height:500px;
+}
+
+.merch-totebags-carousel .cf-track{
+height:500px;
+}
+
+.merch-stickers-carousel .cf-track{
+height:430px;
+}
+
+.merch-stickers-carousel .merch-item{
+width:280px;
+max-width:280px;
+}
+
+/* =========================================================
+   DISCOGRAFÍA
+========================================================= */
+
+.discography-carousel{
+max-width:1000px;
+margin-top:60px;
+}
+
+.discography-carousel .cf-track{
+height:500px;
+}
+
+.discography-carousel .album{
+width:260px;
+max-width:260px;
+
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+
+text-align:center;
+}
+
+.discography-carousel .album.cf-center{
+box-shadow:
+0 25px 60px rgba(6,24,28,.08);
+}
+
+.discography-carousel .album.cf-center:hover{
+transform:
+translate3d(-50%,-50%,80px)
+scale(1.02);
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:768px){
+
+.cf-carousel{
+margin-top:40px;
+}
+
+.cf-track{
+height:470px;
+overflow:hidden;
+}
+
+.cf-track > *.cf-center{
+transform:
+translate3d(-50%,-50%,50px)
+scale(1);
+}
+
+.cf-track > *.cf-prev{
+transform:
+translate3d(calc(-50% - 175px),-50%,0)
+rotateY(25deg)
+scale(.72);
+
+opacity:.28;
+}
+
+.cf-track > *.cf-next{
+transform:
+translate3d(calc(-50% + 175px),-50%,0)
+rotateY(-25deg)
+scale(.72);
+
+opacity:.28;
+}
+
+.cf-track > *.cf-prev-2,
+.cf-track > *.cf-next-2{
+opacity:0;
+pointer-events:none;
+}
+
+/* flechas */
+
+.cf-arrow{
+width:40px;
+height:40px;
+font-size:30px;
+background:rgba(255,255,255,.68);
+}
+
+.cf-prev{
+left:4px;
+}
+
+.cf-next{
+right:4px;
+}
+
+/* videos */
+
+.video-carousel .video-item{
+width:min(78vw,430px);
+max-width:min(78vw,430px);
+}
+
+.video-carousel .video-item iframe{
+height:240px;
+}
+
+/* galería */
+
+.gallery-carousel .gallery-card{
+width:min(78vw,430px);
+max-width:min(78vw,430px);
+}
+
+/* merch */
+
+.merch-carousel .merch-item{
+width:min(72vw,280px);
+max-width:min(72vw,280px);
+}
+
+.merch-carousel .cf-track{
+height:470px;
+}
+
+.merch-stickers-carousel .cf-track{
+height:430px;
+}
+
+/* discografía */
+
+.discography-carousel .album{
+width:220px;
+max-width:220px;
+}
+
+.discography-carousel .cf-track{
+height:450px;
+}
+
+}
