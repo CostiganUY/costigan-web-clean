@@ -132,15 +132,6 @@ const galleries = {
     ]
   },
 
-  barreiro: {
-    title: "BARREIRO",
-    images: [
-      "assets/img/gallery/barreiro/Barreiro1.webp",
-      "assets/img/gallery/barreiro/Barreiro2.webp",
-      "assets/img/gallery/barreiro/Barreiro3.webp"
-    ]
-  },
-
   film: {
     title: "FILM",
     images: [
@@ -164,6 +155,102 @@ const galleries = {
       "assets/img/gallery/film/Film18.webp",
       "assets/img/gallery/film/Film19.webp",
       "assets/img/gallery/film/Film20.webp"
+    ]
+  },
+
+  grabacion: {
+    title: "GRABACIÓN",
+    images: [
+      "assets/img/gallery/grabacion/Grab1.webp",
+      "assets/img/gallery/grabacion/Grab2.webp",
+      "assets/img/gallery/grabacion/Grab3.webp",
+      "assets/img/gallery/grabacion/Grab4.webp",
+      "assets/img/gallery/grabacion/Grab5.webp",
+      "assets/img/gallery/grabacion/Grab6.webp",
+      "assets/img/gallery/grabacion/Grab7.webp",
+      "assets/img/gallery/grabacion/Grab8.webp"
+    ]
+  },
+
+  lunas: {
+    title: "LUNAS",
+    images: [
+      "assets/img/gallery/lunas/Lunas1.webp",
+      "assets/img/gallery/lunas/Lunas2.webp",
+      "assets/img/gallery/lunas/Lunas3.webp",
+      "assets/img/gallery/lunas/Lunas4.webp",
+      "assets/img/gallery/lunas/Lunas5.webp",
+      "assets/img/gallery/lunas/Lunas6.webp",
+      "assets/img/gallery/lunas/Lunas7.webp",
+      "assets/img/gallery/lunas/Lunas8.webp",
+      "assets/img/gallery/lunas/Lunas9.webp",
+      "assets/img/gallery/lunas/Lunas10.webp",
+      "assets/img/gallery/lunas/Lunas11.webp"
+    ]
+  },
+
+  savia: {
+    title: "SAVIA",
+    images: [
+      "assets/img/gallery/savia/Savia1.webp",
+      "assets/img/gallery/savia/Savia2.webp",
+      "assets/img/gallery/savia/Savia3.webp",
+      "assets/img/gallery/savia/Savia4.webp",
+      "assets/img/gallery/savia/Savia5.webp",
+      "assets/img/gallery/savia/Savia6.webp",
+      "assets/img/gallery/savia/Savia7.webp",
+      "assets/img/gallery/savia/Savia8.webp",
+      "assets/img/gallery/savia/Savia9.webp",
+      "assets/img/gallery/savia/Savia10.webp"
+    ]
+  },
+
+  barreiro: {
+    title: "BARREIRO",
+    images: [
+      "assets/img/gallery/barreiro/Barreiro1.webp",
+      "assets/img/gallery/barreiro/Barreiro2.webp",
+      "assets/img/gallery/barreiro/Barreiro3.webp",
+      "assets/img/gallery/barreiro/Barreiro4.webp",
+      "assets/img/gallery/barreiro/Barreiro5.webp"
+    ]
+  },
+
+  im: {
+    title: "IM",
+    images: [
+      "assets/img/gallery/im/Im1.webp",
+      "assets/img/gallery/im/Im2.webp",
+      "assets/img/gallery/im/Im3.webp",
+      "assets/img/gallery/im/Im4.webp",
+      "assets/img/gallery/im/Im5.webp",
+      "assets/img/gallery/im/Im6.webp"
+    ]
+  },
+
+  inmigrantes: {
+    title: "INMIGRANTES",
+    images: [
+      "assets/img/gallery/inmigrantes/Inmi1.webp",
+      "assets/img/gallery/inmigrantes/Inmi2.webp",
+      "assets/img/gallery/inmigrantes/Inmi3.webp",
+      "assets/img/gallery/inmigrantes/Inmi4.webp",
+      "assets/img/gallery/inmigrantes/Inmi5.webp",
+      "assets/img/gallery/inmigrantes/Inmi6.webp",
+      "assets/img/gallery/inmigrantes/Inmi7.webp"
+    ]
+  },
+
+  newpalmer: {
+    title: "NEW PALMER",
+    images: [
+      "assets/img/gallery/newpalmer/Newpalmer1.webp",
+      "assets/img/gallery/newpalmer/Newpalmer2.webp",
+      "assets/img/gallery/newpalmer/Newpalmer3.webp",
+      "assets/img/gallery/newpalmer/Newpalmer4.webp",
+      "assets/img/gallery/newpalmer/Newpalmer5.webp",
+      "assets/img/gallery/newpalmer/Newpalmer6.webp",
+      "assets/img/gallery/newpalmer/Newpalmer7.webp"
     ]
   }
 
