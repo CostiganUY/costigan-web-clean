@@ -3229,19 +3229,19 @@ footer{
 /* Última fila: dos elementos centrados */
 
 .platform-grid a:nth-child(7){
-  grid-column:2;
+  grid-column:1;
 
-  justify-self:end;
+  justify-self:center;
 
-  transform:translateX(-25%);
+  transform:translateX(50%);
 }
 
 .platform-grid a:nth-child(8){
-  grid-column:2;
+  grid-column:3;
 
-  justify-self:start;
+  justify-self:center;
 
-  transform:translateX(25%);
+  transform:translateX(-50%);
 }
 
   .show{
