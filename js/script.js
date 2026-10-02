@@ -474,15 +474,27 @@ if (lightbox) {
 const tracks = [
   "assets/audio/Botánico.mp3",
   "assets/audio/Amanda.mp3",
+  "assets/audio/Dolor nuevo.mp3",
+  "assets/audio/Perros de caza.mp3",
+  "assets/audio/Intrusión.mp3",
   "assets/audio/Balconeras.mp3",
-  "assets/audio/Intrusión.mp3"
+  "assets/audio/Branquias.mp3",
+  "assets/audio/Pulitzer.mp3",
+  "assets/audio/Puñal.mp3",
+  "assets/audio/Nidal.mp3"
 ];
 
 const trackNames = [
   "ALGAS — Botánico",
   "ALGAS — Amanda",
+  "ALGAS — Dolor Nuevo",
+  "ALGAS — Perros de Caza",
+  "ALGAS — Intrusión",
   "ALGAS — Balconeras",
-  "ALGAS — Intrusión"
+  "ALGAS — Branquias",
+  "ALGAS — Pulitzer",
+  "ALGAS — Puñal",
+  "ALGAS — Nidal"
 ];
 
 let currentTrack = 0;
