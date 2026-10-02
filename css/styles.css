@@ -3174,26 +3174,75 @@ footer{
     height:28px;
   }
 
-  .platform-grid{
-    gap:40px;
-  }
+/* =========================================================
+   REDES — MOBILE
+========================================================= */
 
-  .platform-grid img{
-    width:34px;
-    height:34px;
-  }
+.platform-grid{
+  display:grid;
 
-  .platform-grid span{
-    position:relative;
+  grid-template-columns:repeat(3, 1fr);
 
-    top:8px;
+  grid-template-rows:repeat(3, auto);
 
-    opacity:1;
+  column-gap:20px;
+  row-gap:42px;
 
-    transform:none;
+  width:min(90vw, 420px);
 
-    font-size:0.75rem;
-  }
+  margin:40px auto 0;
+
+  align-items:center;
+  justify-items:center;
+}
+
+.platform-grid a{
+  width:100%;
+
+  display:flex;
+
+  flex-direction:column;
+
+  align-items:center;
+  justify-content:center;
+}
+
+.platform-grid img{
+  width:34px;
+  height:34px;
+}
+
+.platform-grid span{
+  position:relative;
+
+  top:8px;
+
+  opacity:1;
+
+  transform:none;
+
+  font-size:0.75rem;
+
+  text-align:center;
+}
+
+/* Última fila: dos elementos centrados */
+
+.platform-grid a:nth-child(7){
+  grid-column:2;
+
+  justify-self:end;
+
+  transform:translateX(-25%);
+}
+
+.platform-grid a:nth-child(8){
+  grid-column:2;
+
+  justify-self:start;
+
+  transform:translateX(25%);
+}
 
   .show{
     grid-template-columns:1fr;
