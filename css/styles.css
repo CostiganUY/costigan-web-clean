@@ -470,7 +470,7 @@ footer{
 
   letter-spacing:5px;
 
-  color:#ece4cf;
+  color:#af5249;
 
   text-shadow:
     0 0 10px rgba(6,24,28,0.6),
@@ -2752,7 +2752,7 @@ footer{
    COVERFLOW CENTER
 ========================================================= */
 
-.cf-track > *.cf-center{
+.cf-track > *.cf-item-center{
   transform:
     translate3d(-50%,-50%,80px)
     scale(1);
@@ -2769,7 +2769,7 @@ footer{
    COVERFLOW LEFT
 ========================================================= */
 
-.cf-track > *.cf-prev{
+.cf-track > *.cf-item-prev{
   transform:
     translate3d(calc(-50% - 330px),-50%,0)
     rotateY(28deg)
@@ -2787,7 +2787,7 @@ footer{
    COVERFLOW RIGHT
 ========================================================= */
 
-.cf-track > *.cf-next{
+.cf-track > *.cf-item-next{
   transform:
     translate3d(calc(-50% + 330px),-50%,0)
     rotateY(-28deg)
@@ -2805,7 +2805,7 @@ footer{
    COVERFLOW SECONDARY LEFT
 ========================================================= */
 
-.cf-track > *.cf-prev-2{
+.cf-track > *.cf-item-prev-2{
   transform:
     translate3d(calc(-50% - 530px),-50%,0)
     rotateY(38deg)
@@ -2823,7 +2823,7 @@ footer{
    COVERFLOW SECONDARY RIGHT
 ========================================================= */
 
-.cf-track > *.cf-next-2{
+.cf-track > *.cf-item-next-2{
   transform:
     translate3d(calc(-50% + 530px),-50%,0)
     rotateY(-38deg)
@@ -2841,7 +2841,7 @@ footer{
    COVERFLOW HIDDEN
 ========================================================= */
 
-.cf-track > *.cf-hidden{
+.cf-track > *.cf-item-hidden{
   transform:
     translate3d(-50%,-50%,0)
     scale(.5);
@@ -2857,8 +2857,7 @@ footer{
 /* =========================================================
    COVERFLOW ARROWS
    IMPORTANTE:
-   se limitan a .cf-arrow para no interferir
-   con las tarjetas .cf-prev / .cf-next
+   las flechas mantienen sus propias clases
 ========================================================= */
 
 .cf-arrow{
@@ -2872,22 +2871,18 @@ footer{
   height:48px;
 
   display:flex;
-
   align-items:center;
   justify-content:center;
 
-  border:1px solid rgba(6,24,28,.15);
-
+  border:1px solid rgba(6,24,28,0.15);
   border-radius:50%;
 
-  background:rgba(255,255,255,.78);
+  background:rgba(255,255,255,0.78);
 
   color:#06181c;
 
   font-family:inherit;
-
-  font-size:36px;
-
+  font-size:32px;
   line-height:1;
 
   cursor:pointer;
@@ -2895,9 +2890,9 @@ footer{
   z-index:20;
 
   transition:
-    background .3s ease,
-    transform .3s ease,
-    box-shadow .3s ease;
+    background 0.3s ease,
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 
   backdrop-filter:blur(8px);
 }
@@ -2913,10 +2908,10 @@ footer{
 .cf-arrow:hover{
   transform:translateY(-50%) scale(1.08);
 
-  background:rgba(255,255,255,.95);
+  background:rgba(255,255,255,0.95);
 
   box-shadow:
-    0 10px 30px rgba(6,24,28,.15);
+    0 10px 30px rgba(6,24,28,0.15);
 }
 
 
